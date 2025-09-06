@@ -5,19 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Final Pixel Animasyon</title>
 <style>
-html, body {
-  margin:0; padding:0; overflow:hidden;
-  background:#f8d1dc;
-  font-family:sans-serif;
-}
-#container { position: relative; width:100vw; height:100vh; }
+html, body { margin:0; padding:0; overflow:hidden; background:#f8d1dc; font-family:sans-serif;}
+#container { position:relative; width:100vw; height:100vh;}
 canvas { display:block; }
 .overlay-text {
   position:absolute; width:100%; text-align:center;
   top:40%; font-size:2em; color:white;
   text-shadow:2px 2px 10px rgba(0,0,0,0.6);
   perspective:1000px; transform-style:preserve-3d;
-  opacity:1;
+  opacity:1; transition: opacity 0.5s;
 }
 </style>
 </head>
@@ -26,7 +22,6 @@ canvas { display:block; }
   <div id="text" class="overlay-text">Kalbe tıklamak ister misin?</div>
   <canvas id="canvas"></canvas>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.14.0/gsap.min.js"></script>
 <script>
 const canvas=document.getElementById('canvas');
@@ -41,79 +36,89 @@ let doorSize={w:150,h:250};
 let doorPos={x:canvas.width/2, y:canvas.height/2};
 let lotusDrawn=false;
 
-// Particle class
+// Particle class (her piksel ayrı)
 class Particle{
-  constructor(x,y,color){
-    this.x=this.origX=x; this.y=this.origY=y;
-    this.vx=Math.random()*8-4; this.vy=Math.random()*8-4;
+  constructor(x,y,color,targetX,targetY){
+    this.x=x; this.y=y;
+    this.origX=x; this.origY=y;
+    this.targetX=targetX||x; this.targetY=targetY||y;
+    this.vx=Math.random()*10-5; this.vy=Math.random()*10-5;
     this.color=color;
   }
   update(){
     if(stage===1){ this.x+=this.vx; this.y+=this.vy; }
-    else if(stage>=2){ this.vx+=(this.origX-this.x)*0.08; this.vy+=(this.origY-this.y)*0.08;
-      this.x+=(this.origX-this.x)*0.08; this.y+=(this.origY-this.y)*0.08;
+    else if(stage>=2){
+      this.x+=(this.targetX-this.x)*0.08;
+      this.y+=(this.targetY-this.y)*0.08;
     }
   }
-  draw(ctx){ ctx.fillStyle=this.color; ctx.fillRect(this.x,this.y,4,4); }
+  draw(ctx){ ctx.fillStyle=this.color; ctx.fillRect(this.x,this.y,4,4);}
 }
 
-// Draw heart
-function drawHeart(cx,cy,size){
-  ctx.beginPath();
-  const top=size*0.3;
-  ctx.moveTo(cx,cy+top);
-  ctx.bezierCurveTo(cx+size/2,cy-size/2, cx+size*1.5,cy+size/3, cx,cy+size);
-  ctx.bezierCurveTo(cx-size*1.5,cy+size/3, cx-size/2,cy-size/2, cx,cy+top);
-  ctx.fillStyle='#ff6fa2';
-  ctx.fill();
-}
-
-// Draw door
-function drawDoor(){
-  ctx.strokeStyle='#fff'; ctx.lineWidth=5;
-  ctx.strokeRect(doorPos.x-doorSize.w/2, doorPos.y-doorSize.h/2, doorSize.w, doorSize.h);
-  ctx.beginPath();
-  ctx.arc(doorPos.x+doorSize.w/2-20, doorPos.y,10,0,Math.PI*2);
-  ctx.fillStyle='#fff'; ctx.fill();
-}
-
-// Draw lotus (detaylı)
-function drawLotus(){
-  const x=canvas.width/2, y=canvas.height/2;
-  ctx.fillStyle='white';
-  for(let i=0;i<12;i++){
-    ctx.beginPath();
-    ctx.ellipse(x, y, 15, 60, i*Math.PI/6, 0, Math.PI*2);
-    ctx.fill();
+// Kalp piksellerini oluştur
+function createHeartParticles(){
+  particles=[];
+  for(let y=-heartSize; y<=heartSize; y+=4){
+    for(let x=-heartSize; x<=heartSize; x+=4){
+      let nx = x/(heartSize), ny=y/(heartSize);
+      if((nx*nx + ny*ny - 0.3)*(nx*nx + ny*ny - 0.3)*(nx*nx + ny*ny - 0.3) - nx*nx*ny*ny*ny <=0){
+        particles.push(new Particle(canvas.width/2+x, canvas.height/2+y,'#ff6fa2'));
+      }
+    }
   }
-  ctx.beginPath();
-  ctx.arc(x,y,20,0,Math.PI*2); ctx.fill();
+}
+
+// Kapı piksellerini oluştur
+function createDoorParticles(){
+  particles=[];
+  for(let y=-doorSize.h/2; y<=doorSize.h/2; y+=4){
+    for(let x=-doorSize.w/2; x<=doorSize.w/2; x+=4){
+      if(x===-doorSize.w/2 || x===doorSize.w/2 || y===-doorSize.h/2 || y===doorSize.h/2){
+        let px=doorPos.x+x; let py=doorPos.y+y;
+        particles.push(new Particle(canvas.width/2,canvas.height/2,'#fff',px,py));
+      }
+    }
+  }
+}
+
+// Lotus pikselleri
+function createLotusParticles(){
+  particles=[];
+  let cx=canvas.width/2, cy=canvas.height/2;
+  for(let i=0;i<12;i++){
+    for(let r=0;r<60;r+=4){
+      let angle=i*Math.PI/6;
+      let px=cx+r*Math.cos(angle), py=cy+r*Math.sin(angle);
+      particles.push(new Particle(canvas.width/2,canvas.height/2,'#fff',px,py));
+    }
+  }
 }
 
 // Animate loop
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(stage===0) drawHeart(canvas.width/2,canvas.height/2,heartSize);
-  if(stage>=1) particles.forEach(p=>{p.update(); p.draw(ctx);});
-  if(stage===2) drawDoor();
-  if(stage===4 && lotusDrawn) drawLotus();
+  particles.forEach(p=>{ p.update(); p.draw(ctx); });
   requestAnimationFrame(animate);
 }
 animate();
 
+// Başlangıç kalp
+createHeartParticles();
+
 // Click handler
 canvas.addEventListener('click',()=>{
   if(stage===0){
-    for(let i=0;i<300;i++) particles.push(new Particle(canvas.width/2,canvas.height/2,'#ff6fa2'));
-    document.getElementById('text').style.opacity=0;
     stage=1;
+    document.getElementById('text').style.opacity=0;
     setTimeout(()=>{
       stage=2;
+      createDoorParticles();
       document.getElementById('text').innerText="Kapı çalıyor bitanem, açmıcak mısın?";
       document.getElementById('text').style.opacity=1;
     },800);
   }else if(stage===2){
-    stage=3; document.getElementById('text').style.opacity=0;
+    stage=3;
+    document.getElementById('text').style.opacity=0;
     setTimeout(()=>{
       document.getElementById('text').innerText="😊";
       document.getElementById('text').style.opacity=1;
@@ -129,12 +134,14 @@ canvas.addEventListener('click',()=>{
               document.getElementById('text').style.opacity=1;
               setTimeout(()=>{
                 document.getElementById('text').style.opacity=0;
-                stage=4; lotusDrawn=true;
+                stage=4;
+                lotusDrawn=true;
+                createLotusParticles();
                 document.getElementById('text').innerText="Bu çiçek senin için bitanem";
                 document.getElementById('text').style.opacity=1;
                 setTimeout(()=>{
                   particles=[];
-                  for(let i=0;i<400;i++) particles.push(new Particle(canvas.width/2,canvas.height/2,'#fff'));
+                  for(let i=0;i<500;i++) particles.push(new Particle(canvas.width/2,canvas.height/2,'#fff'));
                 },3000);
               },1000);
             },1000);
