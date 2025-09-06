@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalp ve Lotus Animasyonu</title>
+<title>Kalp ve Gerçek Lotus</title>
 <style>
   body {
     margin: 0;
@@ -69,7 +69,8 @@
     margin-top: 20px;
     border: 2px solid pink;
     padding: 10px;
-    width: 300px;
+    width: 80%;
+    max-width: 300px;
     border-radius: 10px;
     color: white;
     font-size: 16px;
@@ -77,7 +78,6 @@
     overflow: hidden;
   }
 
-  /* Typewriter efekti */
   #chat-text::after {
     content: '|';
     animation: blink 1s infinite;
@@ -100,41 +100,56 @@
   /* Lotus çiçeği */
   #lotus {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 300px;
+    max-width: 80vw;
+    height: 300px;
+    max-height: 80vw;
     margin-top: 20px;
     opacity: 0;
-    transition: opacity 1s;
+    transition: opacity 1.5s;
   }
-  /* Basit lotus şekli (SVG) */
+
   #lotus svg {
     width: 100%;
     height: 100%;
+  }
+
+  /* Responsive text ve kalp */
+  @media (max-width: 500px) {
+    #big-heart { font-size: 80px; }
+    #chat-bar { width: 90%; font-size: 14px; }
+    .falling-heart { font-size: 18px; }
   }
 
 </style>
 </head>
 <body>
 
-<!-- Küçük kalpler -->
 <div id="hearts-container"></div>
 
-<!-- Büyük kalp ve dalgalı harfler -->
 <div id="big-heart">
   <div id="name-text"></div>
 </div>
 
-<!-- Sohbet barı -->
 <div id="chat-bar">
   <span id="chat-text"></span>
 </div>
 
-<!-- Kutucuk ve lotus -->
 <div id="box-emoji"></div>
+
 <div id="lotus">
-  <svg viewBox="0 0 100 100">
-    <g fill="white">
-      <path d="M50 10 Q55 30 70 30 Q55 40 60 60 Q50 50 40 60 Q45 40 30 30 Q45 30 50 10 Z"/>
+  <!-- Daha gerçekçi lotus SVG -->
+  <svg viewBox="0 0 200 200">
+    <defs>
+      <radialGradient id="grad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
+        <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
+      </radialGradient>
+    </defs>
+    <g fill="url(#grad)">
+      <path d="M100,10 C110,50 150,50 120,90 C160,120 140,170 100,140 C60,170 40,120 80,90 C50,50 90,50 100,10 Z"/>
+      <path d="M100,20 C105,45 140,45 115,80 C150,110 135,160 100,135 C65,160 50,110 85,80 C60,45 95,45 100,20 Z"/>
+      <circle cx="100" cy="100" r="15" fill="white"/>
     </g>
   </svg>
 </div>
@@ -159,6 +174,7 @@
     span.textContent = char === ' ' ? '\u00A0' : char;
     nameTextContainer.appendChild(span);
   });
+
   // Büyük kalbi göstermek
   setTimeout(()=> {
     document.getElementById('big-heart').style.opacity = 1;
@@ -186,11 +202,15 @@
       box.style.opacity = 0;
       setTimeout(()=> {
         document.getElementById('lotus').style.opacity = 1;
-      }, 1000);
+        // 2 saniye sonra kalpler kayboluyor
+        setTimeout(()=> {
+          heartContainer.innerHTML = '';
+        }, 2000);
+      }, 500);
     });
   }
 
-  setTimeout(typeWriter, 2500); // Büyük kalpten sonra başlasın
+  setTimeout(typeWriter, 2500);
 </script>
 
 </body>
