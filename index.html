@@ -90,18 +90,19 @@ body {
   transition: opacity 1.5s;
 }
 
-/* Lotus yaprak dalgalanması ve ışık */
-#lotus path {
+#lotus path, #lotus circle {
   transform-origin: 100px 100px;
   animation: sway 3s ease-in-out infinite alternate;
 }
+
 #lotus g {
   animation: glow 2s ease-in-out infinite alternate;
 }
-@keyframes sway {0%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}100%{transform:rotate(-2deg);}}
-@keyframes glow {0%{opacity:0.8;}50%{opacity:1;}100%{opacity:0.8;}}
 
-/* Seçim yazısı */
+@keyframes sway {0%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}100%{transform:rotate(-2deg);}}
+@keyframes glow {0%{opacity:0.85;}50%{opacity:1;}100%{opacity:0.85;}}
+
+/* Teklif yazısı */
 #proposal-bar {
   margin-top: 20px;
   border: 2px solid pink;
@@ -169,11 +170,13 @@ body {
       <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
       <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
     </radialGradient>
-    <filter id="blur"><feGaussianBlur in="SourceGraphic" stdDeviation="0.8"/></filter>
+    <filter id="blur"><feGaussianBlur in="SourceGraphic" stdDeviation="1"/></filter>
   </defs>
   <g fill="url(#grad)" filter="url(#blur)">
-    <path d="M100,10 C110,50 150,50 120,90 C160,120 140,170 100,140 C60,170 40,120 80,90 C50,50 90,50 100,10 Z"/>
-    <path d="M100,20 C105,45 140,45 115,80 C150,110 135,160 100,135 C65,160 50,110 85,80 C60,45 95,45 100,20 Z"/>
+    <!-- Çok detaylı lotus yaprakları -->
+    <path d="M100,20 C115,50 155,50 125,90 C165,120 145,170 100,140 C55,170 35,120 75,90 C45,50 85,50 100,20 Z"/>
+    <path d="M100,30 C110,55 150,55 120,85 C155,115 135,160 100,130 C65,160 45,115 80,85 C55,55 95,55 100,30 Z"/>
+    <path d="M100,40 C108,60 148,60 118,80 C150,110 130,150 100,125 C70,150 50,110 82,80 C60,60 92,60 100,40 Z"/>
     <circle cx="100" cy="100" r="15" fill="white"/>
   </g>
 </svg>
@@ -228,11 +231,14 @@ function showBox(){
   box.addEventListener('click',()=>{
     box.style.opacity=0;
     setTimeout(()=>{
-      document.getElementById('lotus').style.opacity=1;
-      // Kalpler 2 saniye sonra kaybolacak
-      setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},2000);
-      // Lotus çıktıktan sonra Sevgilim yazısı
-      setTimeout(showProposal,1000);
+      const lotus=document.getElementById('lotus');
+      lotus.style.opacity=1;
+
+      // Kalpler lotus çıktıktan 3 saniye sonra kaybolacak
+      setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
+
+      // Teklif mesajı lotus çıktıktan 2 saniye sonra
+      setTimeout(showProposal,2000);
     },500);
   });
 }
