@@ -27,7 +27,7 @@ body {
 @keyframes fall {
   0% { top: -50px; opacity: 0; }
   50% { opacity: 1; }
-  100% { top: 60%; opacity: 1; } /* Başlangıçta kaybolmaz */
+  100% { top: 100%; opacity: 0; }
 }
 
 /* Büyük kalp */
@@ -156,15 +156,17 @@ body {
   <defs>
     <radialGradient id="roseGrad" cx="50%" cy="50%" r="50%">
       <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
-      <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:white;stop-opacity:1"/>
     </radialGradient>
   </defs>
   <g fill="url(#roseGrad)">
-    <!-- Basit beyaz gül çizimi -->
-    <path d="M100,100 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0" />
-    <path d="M100,90 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0" />
-    <path d="M100,80 m-5,0 a5,5 0 1,0 10,0 a5,5 0 1,0 -10,0" />
-    <!-- Yeşil kısa dal -->
+    <!-- Çok yapraklı beyaz gül -->
+    <path d="M100,100 m-25,0 a25,25 0 1,0 50,0 a25,25 0 1,0 -50,0" />
+    <path d="M100,90 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0" />
+    <path d="M100,80 m-15,0 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0" />
+    <path d="M100,70 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0" />
+    <path d="M100,65 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0" />
+    <!-- Kısa yeşil dal -->
     <rect x="98" y="100" width="4" height="50" fill="green"/>
   </g>
 </svg>
@@ -178,10 +180,10 @@ body {
 
 <div id="result"></div>
 
-<!-- Ses (YOUTUBE LINKİ BURAYA) -->
-<audio id="music" autoplay loop>
-  <source src="https://youtu.be/dAr1olA513s?si=_Wewn8gKjP39wLBn" type="audio/mp3">
-</audio>
+<!-- YouTube müzik embed -->
+<div id="music-container" style="display:none;">
+  <iframe width="0" height="0" src="https://www.youtube.com/embed/dAr1olA513s?autoplay=1&loop=1&playlist=dAr1olA513s" title="Yapboz - Yaz Gecesi" allow="autoplay" frameborder="0"></iframe>
+</div>
 
 <script>
 // Küçük kalpler
@@ -224,6 +226,8 @@ function showBox(){
   box.addEventListener('click',()=>{
     box.style.opacity=0;
     chatText.innerHTML=''; // Yazıyı sil
+    // YouTube müziği başlat
+    document.getElementById('music-container').style.display='block';
     setTimeout(()=>{
       document.getElementById('rose').style.opacity=1;
       // Kalpler 3 saniye sonra kaybolacak
