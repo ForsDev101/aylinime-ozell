@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aylinime özel</title>
+<title>Kalp, Gül ve Seçim Animasyonu</title>
 <style>
 body {
   margin: 0;
@@ -15,29 +15,28 @@ body {
   flex-direction: column;
   height: 100vh;
   font-family: sans-serif;
-  color: white;
 }
 
 /* Küçük kalpler */
 .falling-heart {
   position: absolute;
-  font-size: 22px;
+  font-size: 24px;
   color: pink;
-  animation: fall linear infinite;
+  animation: fall linear forwards;
 }
 
 @keyframes fall {
-  0% { top: -50px; }
-  100% { top: 100%; }
+  0% { top: -50px; opacity: 0; }
+  50% { opacity: 1; }
+  100% { top: 60%; opacity: 0; }
 }
 
-/* Büyük kalp + dalgalı yazı */
+/* Büyük kalp */
 #big-heart {
   font-size: 120px;
   color: red;
   opacity: 0;
   position: relative;
-  margin-bottom: 20px;
 }
 
 #name-text span {
@@ -56,31 +55,57 @@ body {
 
 @keyframes wave { 0%,100% { top:0 } 50% { top:-15px } }
 
-/* Gül */
-#rose {
-  width: 200px;
-  opacity: 0;
-  transition: opacity 2s;
-  margin-bottom: 20px;
+/* Sohbet barı */
+#chat-bar {
+  margin-top: 20px;
+  border: 2px solid pink;
+  padding: 10px;
+  width: 80%;
+  max-width: 300px;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  overflow: hidden;
 }
 
-/* Teklif yazısı */
+#chat-text::after { content:'|'; animation: blink 1s infinite; }
+@keyframes blink {0%,50%,100%{opacity:1} 25%,75%{opacity:0}}
+
+/* Kutucuk emoji */
+#box-emoji {
+  font-size: 40px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: opacity 1s;
+}
+
+/* Gül çiçeği */
+#rose {
+  width: 350px;
+  max-width: 90vw;
+  height: 350px;
+  max-height: 90vw;
+  margin-top: 20px;
+  opacity: 0;
+  transition: opacity 1.5s;
+}
+
+/* Seçim yazısı */
 #proposal-bar {
   margin-top: 20px;
   border: 2px solid pink;
   padding: 10px;
   width: 80%;
-  max-width: 320px;
+  max-width: 300px;
   border-radius: 10px;
-  font-size: 18px;
-  text-align: center;
+  color: white;
+  font-size: 16px;
+  overflow: hidden;
   display: none;
 }
-
 #proposal-text::after { content:'|'; animation: blink 1s infinite; }
-@keyframes blink {0%,50%,100%{opacity:1} 25%,75%{opacity:0}}
 
-/* Butonlar */
+/* Evet/Hayır butonları */
 #buttons { margin-top:10px; display:none; }
 #buttons button {
   padding: 10px 20px;
@@ -96,10 +121,10 @@ body {
 #buttons #evet { background-color:#ff69b4; color:white; }
 #buttons #hayir { background-color:#555; color:white; }
 
-/* Sonuç */
-#result { font-size:80px; margin-top:20px; display:none; }
+/* Sonuç emojileri */
+#result { font-size:100px; margin-top:20px; display:none; }
 
-/* Konfeti */
+/* Konfeti animasyonu */
 .confetti {
   position:absolute;
   font-size:24px;
@@ -112,7 +137,7 @@ body {
   #big-heart{font-size:80px;}
   #chat-bar,#proposal-bar{width:90%; font-size:14px;}
   .falling-heart{font-size:18px;}
-  #rose{width:150px;}
+  #rose{width:250px;height:250px;}
   #result{font-size:60px;}
 }
 </style>
@@ -121,28 +146,31 @@ body {
 
 <div id="hearts-container"></div>
 
-<!-- Büyük kalp ve dalgalı yazı -->
 <div id="big-heart"><div id="name-text"></div></div>
 
-<!-- Gül -->
+<div id="chat-bar"><span id="chat-text"></span></div>
+<div id="box-emoji"></div>
+
 <div id="rose">
-<svg viewBox="0 0 200 300" width="100%" height="100%">
-  <!-- Dal -->
-  <rect x="95" y="100" width="10" height="180" fill="green" rx="4"/>
-  <!-- Yapraklar -->
-  <ellipse cx="80" cy="160" rx="25" ry="15" fill="green"/>
-  <ellipse cx="120" cy="200" rx="25" ry="15" fill="green"/>
-  <!-- Beyaz gül yaprakları -->
-  <circle cx="100" cy="80" r="40" fill="white" stroke="#ddd" stroke-width="2"/>
-  <circle cx="90" cy="70" r="30" fill="white" stroke="#ccc" stroke-width="1.5"/>
-  <circle cx="110" cy="70" r="30" fill="white" stroke="#ccc" stroke-width="1.5"/>
-  <circle cx="100" cy="60" r="25" fill="white" stroke="#bbb" stroke-width="1"/>
-  <!-- İç sarı detay -->
-  <circle cx="100" cy="80" r="10" fill="gold"/>
+<svg viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="roseGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <g fill="url(#roseGrad)">
+    <!-- Yapraklar -->
+    <path d="M100,10 C130,40 160,60 130,90 C160,120 140,160 100,140 C60,160 40,120 70,90 C40,60 70,40 100,10 Z"/>
+    <path d="M100,20 C125,45 155,65 125,85 C155,115 135,155 100,135 C65,155 45,115 75,85 C45,65 75,45 100,20 Z"/>
+    <!-- Sarı merkez -->
+    <circle cx="100" cy="100" r="12" fill="yellow"/>
+    <!-- Gövde -->
+    <rect x="95" y="140" width="10" height="60" fill="green"/>
+  </g>
 </svg>
 </div>
 
-<!-- Teklif -->
 <div id="proposal-bar"><span id="proposal-text"></span></div>
 <div id="buttons">
   <button id="evet">Evet</button>
@@ -155,11 +183,11 @@ body {
 // Küçük kalpler
 const heartContainer=document.getElementById('hearts-container');
 const hearts=[];
-for(let i=0;i<25;i++){
+for(let i=0;i<20;i++){
   const heart=document.createElement('span');
   heart.classList.add('falling-heart');
   heart.style.left=Math.random()*window.innerWidth+'px';
-  heart.style.animationDuration=2+Math.random()*3+'s';
+  heart.style.animationDuration=2+Math.random()*2+'s';
   heart.textContent='❤️';
   heartContainer.appendChild(heart);
   hearts.push(heart);
@@ -175,24 +203,34 @@ nameText.split('').forEach(char=>{
 });
 setTimeout(()=>{document.getElementById('big-heart').style.opacity=1;},2000);
 
-// Gül göster
-setTimeout(()=>{
-  document.getElementById('rose').style.opacity=1;
+// Sohbet yazısı
+const chatString="Kutuya tıklamak ister misin bitanem?";
+let i=0;
+const chatText=document.getElementById("chat-text");
+function typeWriter(){
+  if(i<chatString.length){
+    chatText.innerHTML+=chatString.charAt(i);
+    i++;
+    setTimeout(typeWriter,100);
+  }else{showBox();}
+}
+function showBox(){
+  const box=document.getElementById("box-emoji");
+  box.textContent='📦';
+  box.addEventListener('click',()=>{
+    box.style.opacity=0;
+    setTimeout(()=>{
+      document.getElementById('rose').style.opacity=1;
+      // Kalpler 3 saniye sonra kaybolacak
+      setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
+      // Gül çıktıktan 3 saniye sonra Sevgilim olur musun mesajı
+      setTimeout(showProposal,3000);
+    },500);
+  });
+}
+setTimeout(typeWriter,2500);
 
-  // Kalpler 3 sn sonra kaybolacak
-  setTimeout(()=>{
-    hearts.forEach(h=>{
-      h.style.transition="opacity 1s";
-      h.style.opacity=0;
-    });
-  },3000);
-
-  // Teklif yazısı 3 sn sonra çıkacak
-  setTimeout(showProposal,3000);
-
-},1000);
-
-// Teklif yazısı
+// Sevgilim olur musun yazısı
 function showProposal(){
   const proposalBar=document.getElementById('proposal-bar');
   const proposalText=document.getElementById('proposal-text');
@@ -209,15 +247,17 @@ function showProposal(){
   typeProposal();
 }
 
-// Butonlar
+// Evet/Hayır butonları
 function showButtons(){
   const buttons=document.getElementById('buttons');
   buttons.style.display='block';
-  document.getElementById('evet').addEventListener('click',()=>handleAnswer('evet'));
-  document.getElementById('hayir').addEventListener('click',()=>handleAnswer('hayır'));
+  const evetBtn=document.getElementById('evet');
+  const hayirBtn=document.getElementById('hayir');
+  evetBtn.addEventListener('click',()=>handleAnswer('evet'));
+  hayirBtn.addEventListener('click',()=>handleAnswer('hayır'));
 }
 
-// Cevap
+// Cevabı işleme
 function handleAnswer(answer){
   document.getElementById('buttons').style.display='none';
   document.getElementById('proposal-bar').style.display='none';
@@ -225,15 +265,17 @@ function handleAnswer(answer){
   else{showCry();}
 }
 
+// Ağlama
 function showCry(){
   const result=document.getElementById('result');
   result.textContent='😭';
   result.style.display='block';
 }
 
+// Konfeti
 function showConfetti(){
   const colors=['🎉','✨','💖','🌸','💫'];
-  for(let i=0;i<60;i++){
+  for(let i=0;i<50;i++){
     const c=document.createElement('span');
     c.classList.add('confetti');
     c.textContent=colors[Math.floor(Math.random()*colors.length)];
