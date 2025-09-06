@@ -3,215 +3,300 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalp ve Gerçek Lotus</title>
+<title>Kalp, Lotus ve Seçim Animasyonu</title>
 <style>
-  body {
-    margin: 0;
-    background-color: black;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    font-family: sans-serif;
-  }
+body {
+  margin: 0;
+  background-color: black;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  font-family: sans-serif;
+}
 
-  /* Küçük kalpler */
-  .falling-heart {
-    position: absolute;
-    font-size: 24px;
-    color: pink;
-    animation: fall linear forwards;
-  }
+/* Küçük kalpler */
+.falling-heart {
+  position: absolute;
+  font-size: 24px;
+  color: pink;
+  animation: fall linear forwards;
+}
 
-  @keyframes fall {
-    0% { top: -50px; opacity: 0; }
-    50% { opacity: 1; }
-    100% { top: 60%; opacity: 0; }
-  }
+@keyframes fall {
+  0% { top: -50px; opacity: 0; }
+  50% { opacity: 1; }
+  100% { top: 60%; opacity: 0; }
+}
 
-  /* Büyük kalp */
-  #big-heart {
-    font-size: 120px;
-    color: red;
-    opacity: 0;
-    animation: appear 2s forwards;
-    position: relative;
-  }
+/* Büyük kalp */
+#big-heart {
+  font-size: 120px;
+  color: red;
+  opacity: 0;
+  position: relative;
+}
 
-  @keyframes appear {
-    to { opacity: 1; }
-  }
+#name-text span {
+  display: inline-block;
+  position: relative;
+  color: white;
+  animation: wave 1s infinite;
+}
 
-  /* Dalgalı harf animasyonu */
-  #name-text span {
-    display: inline-block;
-    position: relative;
-    color: white;
-    animation: wave 1s infinite;
-  }
+#name-text span:nth-child(1){ animation-delay: 0s; }
+#name-text span:nth-child(2){ animation-delay: 0.1s; }
+#name-text span:nth-child(3){ animation-delay: 0.2s; }
+#name-text span:nth-child(4){ animation-delay: 0.3s; }
+#name-text span:nth-child(5){ animation-delay: 0.4s; }
+#name-text span:nth-child(6){ animation-delay: 0.5s; }
 
-  #name-text span:nth-child(1){ animation-delay: 0s; }
-  #name-text span:nth-child(2){ animation-delay: 0.1s; }
-  #name-text span:nth-child(3){ animation-delay: 0.2s; }
-  #name-text span:nth-child(4){ animation-delay: 0.3s; }
-  #name-text span:nth-child(5){ animation-delay: 0.4s; }
-  #name-text span:nth-child(6){ animation-delay: 0.5s; }
+@keyframes wave { 0%,100% { top:0 } 50% { top:-15px } }
 
-  @keyframes wave {
-    0%, 100% { top: 0; }
-    50% { top: -15px; }
-  }
+/* Sohbet barı */
+#chat-bar {
+  margin-top: 20px;
+  border: 2px solid pink;
+  padding: 10px;
+  width: 80%;
+  max-width: 300px;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  overflow: hidden;
+}
 
-  /* Sohbet barı */
-  #chat-bar {
-    margin-top: 20px;
-    border: 2px solid pink;
-    padding: 10px;
-    width: 80%;
-    max-width: 300px;
-    border-radius: 10px;
-    color: white;
-    font-size: 16px;
-    position: relative;
-    overflow: hidden;
-  }
+#chat-text::after { content:'|'; animation: blink 1s infinite; }
+@keyframes blink {0%,50%,100%{opacity:1} 25%,75%{opacity:0}}
 
-  #chat-text::after {
-    content: '|';
-    animation: blink 1s infinite;
-  }
+/* Kutucuk emoji */
+#box-emoji {
+  font-size: 40px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: opacity 1s;
+}
 
-  @keyframes blink {
-    0%,50%,100% { opacity: 1; }
-    25%,75% { opacity: 0; }
-  }
+/* Lotus çiçeği */
+#lotus {
+  width: 350px;
+  max-width: 90vw;
+  height: 350px;
+  max-height: 90vw;
+  margin-top: 20px;
+  opacity: 0;
+  transition: opacity 1.5s;
+}
 
-  /* Kutucuk emoji */
-  #box-emoji {
-    font-size: 40px;
-    cursor: pointer;
-    display: inline-block;
-    margin-top: 10px;
-    transition: opacity 1s;
-  }
+/* Lotus yaprak dalgalanması ve ışık */
+#lotus path {
+  transform-origin: 100px 100px;
+  animation: sway 3s ease-in-out infinite alternate;
+}
+#lotus g {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes sway {0%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}100%{transform:rotate(-2deg);}}
+@keyframes glow {0%{opacity:0.8;}50%{opacity:1;}100%{opacity:0.8;}}
 
-  /* Lotus çiçeği */
-  #lotus {
-    position: relative;
-    width: 300px;
-    max-width: 80vw;
-    height: 300px;
-    max-height: 80vw;
-    margin-top: 20px;
-    opacity: 0;
-    transition: opacity 1.5s;
-  }
+/* Seçim yazısı */
+#proposal-bar {
+  margin-top: 20px;
+  border: 2px solid pink;
+  padding: 10px;
+  width: 80%;
+  max-width: 300px;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  overflow: hidden;
+  display: none;
+}
+#proposal-text::after { content:'|'; animation: blink 1s infinite; }
 
-  #lotus svg {
-    width: 100%;
-    height: 100%;
-  }
+/* Evet/Hayır butonları */
+#buttons { margin-top:10px; display:none; }
+#buttons button {
+  padding: 10px 20px;
+  margin: 5px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:bold;
+  transition:0.3s;
+}
+#buttons button:hover { transform:scale(1.1); }
+#buttons #evet { background-color:#ff69b4; color:white; }
+#buttons #hayir { background-color:#555; color:white; }
 
-  /* Responsive text ve kalp */
-  @media (max-width: 500px) {
-    #big-heart { font-size: 80px; }
-    #chat-bar { width: 90%; font-size: 14px; }
-    .falling-heart { font-size: 18px; }
-  }
+/* Sonuç emojileri */
+#result { font-size:100px; margin-top:20px; display:none; }
 
+/* Konfeti animasyonu */
+.confetti {
+  position:absolute;
+  font-size:24px;
+  animation: confetti-fall linear forwards;
+}
+@keyframes confetti-fall {0%{top:-50px; opacity:1} 100%{top:100%; opacity:0}}
+
+/* Responsive */
+@media (max-width:500px){
+  #big-heart{font-size:80px;}
+  #chat-bar,#proposal-bar{width:90%; font-size:14px;}
+  .falling-heart{font-size:18px;}
+  #lotus{width:250px;height:250px;}
+  #result{font-size:60px;}
+}
 </style>
 </head>
 <body>
 
 <div id="hearts-container"></div>
 
-<div id="big-heart">
-  <div id="name-text"></div>
-</div>
+<div id="big-heart"><div id="name-text"></div></div>
 
-<div id="chat-bar">
-  <span id="chat-text"></span>
-</div>
-
+<div id="chat-bar"><span id="chat-text"></span></div>
 <div id="box-emoji"></div>
 
 <div id="lotus">
-  <!-- Daha gerçekçi lotus SVG -->
-  <svg viewBox="0 0 200 200">
-    <defs>
-      <radialGradient id="grad" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
-        <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
-      </radialGradient>
-    </defs>
-    <g fill="url(#grad)">
-      <path d="M100,10 C110,50 150,50 120,90 C160,120 140,170 100,140 C60,170 40,120 80,90 C50,50 90,50 100,10 Z"/>
-      <path d="M100,20 C105,45 140,45 115,80 C150,110 135,160 100,135 C65,160 50,110 85,80 C60,45 95,45 100,20 Z"/>
-      <circle cx="100" cy="100" r="15" fill="white"/>
-    </g>
-  </svg>
+<svg viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur in="SourceGraphic" stdDeviation="0.8"/></filter>
+  </defs>
+  <g fill="url(#grad)" filter="url(#blur)">
+    <path d="M100,10 C110,50 150,50 120,90 C160,120 140,170 100,140 C60,170 40,120 80,90 C50,50 90,50 100,10 Z"/>
+    <path d="M100,20 C105,45 140,45 115,80 C150,110 135,160 100,135 C65,160 50,110 85,80 C60,45 95,45 100,20 Z"/>
+    <circle cx="100" cy="100" r="15" fill="white"/>
+  </g>
+</svg>
 </div>
 
+<div id="proposal-bar"><span id="proposal-text"></span></div>
+<div id="buttons">
+  <button id="evet">Evet</button>
+  <button id="hayir">Hayır</button>
+</div>
+
+<div id="result"></div>
+
 <script>
-  // Küçük kalpler oluştur
-  const heartContainer = document.getElementById('hearts-container');
-  for(let i=0; i<20; i++){
-    const heart = document.createElement('span');
-    heart.classList.add('falling-heart');
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.animationDuration = 2 + Math.random()*2 + 's';
-    heart.textContent = '❤️';
-    heartContainer.appendChild(heart);
-  }
+// Küçük kalpler
+const heartContainer=document.getElementById('hearts-container');
+const hearts=[];
+for(let i=0;i<20;i++){
+  const heart=document.createElement('span');
+  heart.classList.add('falling-heart');
+  heart.style.left=Math.random()*window.innerWidth+'px';
+  heart.style.animationDuration=2+Math.random()*2+'s';
+  heart.textContent='❤️';
+  heartContainer.appendChild(heart);
+  hearts.push(heart);
+}
 
-  // Büyük kalp ve dalgalı yazı
-  const nameText = 'A Y L I N';
-  const nameTextContainer = document.getElementById('name-text');
-  nameText.split('').forEach(char => {
-    const span = document.createElement('span');
-    span.textContent = char === ' ' ? '\u00A0' : char;
-    nameTextContainer.appendChild(span);
+// Büyük kalp ve dalgalı harf
+const nameText='A Y L I N';
+const nameTextContainer=document.getElementById('name-text');
+nameText.split('').forEach(char=>{
+  const span=document.createElement('span');
+  span.textContent=char===' ' ? '\u00A0' : char;
+  nameTextContainer.appendChild(span);
+});
+setTimeout(()=>{document.getElementById('big-heart').style.opacity=1;},2000);
+
+// Sohbet yazısı
+const chatString="Kutuya tıklamak ister misin bitanem?";
+let i=0;
+const chatText=document.getElementById("chat-text");
+function typeWriter(){
+  if(i<chatString.length){
+    chatText.innerHTML+=chatString.charAt(i);
+    i++;
+    setTimeout(typeWriter,100);
+  }else{showBox();}
+}
+function showBox(){
+  const box=document.getElementById("box-emoji");
+  box.textContent='📦';
+  box.addEventListener('click',()=>{
+    box.style.opacity=0;
+    setTimeout(()=>{
+      document.getElementById('lotus').style.opacity=1;
+      // Kalpler 2 saniye sonra kaybolacak
+      setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},2000);
+      // Lotus çıktıktan sonra Sevgilim yazısı
+      setTimeout(showProposal,1000);
+    },500);
   });
+}
+setTimeout(typeWriter,2500);
 
-  // Büyük kalbi göstermek
-  setTimeout(()=> {
-    document.getElementById('big-heart').style.opacity = 1;
-  }, 2000);
-
-  // Sohbet yazısı
-  const chatString = "Kutuya tıklamak ister misin bitanem?";
-  let i = 0;
-  const chatText = document.getElementById("chat-text");
-
-  function typeWriter() {
-    if(i < chatString.length){
-      chatText.innerHTML += chatString.charAt(i);
-      i++;
-      setTimeout(typeWriter, 100);
-    } else {
-      showBox();
-    }
+// Sevgilim olur musun yazısı
+function showProposal(){
+  const proposalBar=document.getElementById('proposal-bar');
+  const proposalText=document.getElementById('proposal-text');
+  const text="Sevgilim olur musun bitanem?";
+  let j=0;
+  proposalBar.style.display='block';
+  function typeProposal(){
+    if(j<text.length){
+      proposalText.innerHTML+=text.charAt(j);
+      j++;
+      setTimeout(typeProposal,100);
+    }else{showButtons();}
   }
+  typeProposal();
+}
 
-  function showBox() {
-    const box = document.getElementById("box-emoji");
-    box.textContent = '📦';
-    box.addEventListener('click', ()=>{
-      box.style.opacity = 0;
-      setTimeout(()=> {
-        document.getElementById('lotus').style.opacity = 1;
-        // 2 saniye sonra kalpler kayboluyor
-        setTimeout(()=> {
-          heartContainer.innerHTML = '';
-        }, 2000);
-      }, 500);
-    });
+// Evet/Hayır butonları
+function showButtons(){
+  const buttons=document.getElementById('buttons');
+  buttons.style.display='block';
+  const evetBtn=document.getElementById('evet');
+  const hayirBtn=document.getElementById('hayir');
+  evetBtn.addEventListener('click',()=>handleAnswer('evet'));
+  hayirBtn.addEventListener('click',()=>handleAnswer('hayır'));
+}
+
+// Cevabı işleme
+function handleAnswer(answer){
+  localStorage.setItem('answer',answer);
+  document.getElementById('buttons').style.display='none';
+  document.getElementById('proposal-bar').style.display='none';
+  if(answer==='evet'){showConfetti();}
+  else{showCry();}
+}
+
+// Ağlama
+function showCry(){
+  const result=document.getElementById('result');
+  result.textContent='😭';
+  result.style.display='block';
+}
+
+// Konfeti
+function showConfetti(){
+  const colors=['🎉','✨','💖','🌸','💫'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('span');
+    c.classList.add('confetti');
+    c.textContent=colors[Math.floor(Math.random()*colors.length)];
+    c.style.left=Math.random()*window.innerWidth+'px';
+    c.style.animationDuration=2+Math.random()*2+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>{c.remove();},4000);
   }
-
-  setTimeout(typeWriter, 2500);
+  const result=document.getElementById('result');
+  result.textContent='🎊';
+  result.style.display='block';
+}
 </script>
-
 </body>
 </html>
