@@ -3,194 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <title>Aylin'ime Sürpriz</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
 <style>
-  body{margin:0;overflow:hidden;background:#000;font-family:monospace;}
-  #doorLabel{
-    position:absolute;
-    top:15%;
-    width:100%;
-    text-align:center;
-    color:#ffd6a0;
-    font-size:22px;
-    letter-spacing:1.5px;
-    text-shadow:0 0 10px #aa7b4f;
-    display:none;
-    pointer-events:none;
-  }
-  #counter{
-    position:absolute;
-    right:20px;
-    top:20px;
-    font-size:36px;
-    color:#ff9bcf;
-    display:none;
-  }
-  #finalText{
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%) scale(0.001);
-    color:#ff5aa3;
-    font-size:64px;
-    text-shadow:0 0 40px #ff2d93;
-    font-weight:800;
-    pointer-events:none;
-    text-align:center;
-  }
+body{margin:0;overflow:hidden;background:#000;display:flex;justify-content:center;align-items:center;flex-direction:column;}
+#smallHeart,#bigHeart,#door,#emoji,#rose{position:absolute;cursor:pointer;}
+#smallHeart{width:150px;height:150px;}
+#bigHeart{width:300px;height:300px;display:none;}
+#door{width:200px;height:400px;display:none;top:50%;left:50%;transform:translate(-50%,-50%);}
+#emoji{font-size:80px;display:none;top:50%;left:50%;transform:translate(-50%,-50%);}
+#rose{width:30px;height:30px;display:none;position:absolute;}
+#finalText{display:none;color:#ff5aa3;font-size:64px;text-align:center;margin-top:20px;}
 </style>
 </head>
 <body>
-<div id="doorLabel">Kapı çalıyor, açmayacak mısın?</div>
-<div id="counter">5</div>
+
+<!-- Base64 görseller -->
+<img id="smallHeart" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAMAAADn0v8EAAAAM1BMVEUAAAD///+dnZ3V1dX8/Px/f38qKiozMzP09PS3t7fT09P19fX7+/vAwMC+vr6WlpbNzc1RUbFPAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABT0lEQVR4nO3YwQ6DIBBFUdG2G//9vSk3c9sgVJmef8GG8uGmQ0AAAAAAOAhDquyE8wfs+7uXzbs4QAAAMg/vL8AAGrEx/v+tAsZAAAAAElFTkSuQmCC">
+<img id="bigHeart" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARcAAAEWCAMAAAC0HgyWAAAAM1BMVEUAAAD///+dnZ3V1dX8/Px/f38qKiozMzP09PS3t7fT09P19fX7+/vAwMC+vr6WlpbNzc1RUbFPAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABRUlEQVR4nO3YQQ6DIBAF0ItkgP+/1nqSOKMqDJZtsvADAAAAAAAAAF+H/K+rG+/efk+09n0BAAAAAIC1v/AAAK7PzD3ev66YAAAAASUVORK5CYII=">
+<img id="door" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAM1BMVEUAAAD///+ZmZn8/PzV1dXo6Ojq6urx8fHLy8s+Pj4/Pz9/f38+Pj7+/vAwMD19fXLy8svlK0AAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABWUlEQVR4nO3YwQmAMAgEwQfT/59ZkchWJsPoyyx/AAAAAAAAADsU5TwIAACkDwwAApQPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDw0AgAEAIlVfY5wHnjUcQAAAAASUVORK5CYII=">
+
+<div id="emoji">😀</div>
+<img id="rose" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAAM1BMVEUAAAD///+fn5+UlJS+vr7X19f7+/v8/Pzr6+vR0dHk5OTl5eXa2trb29vZ2dnNzc0xkAtbAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABG0lEQVR4nO3RwQkAIAwAQeO0f7a2zA2KE5Vq1+MlXlz4AACA9I7/EBo3HeMjGBybCVJ0I0wnGjOBEo4MwrwDZCzFPCxAA4VxQ8JOKsEU4cRZTSLQfXH9uKHLIFbaAmiJXyOd2Cl2nFqRhh+ID8cl2ZoZlF/5tq0iG1AAAAAElFTkSuQmCC">
+
 <div id="finalText">Aylin'ime</div>
+
+<audio id="doorSound" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAA... (kısa örnek ses base64)"></audio>
+
 <script>
-let phase='start';
-let heartParticles=[];
-let bigHeartAlpha=0;
-let doorAlpha=0;
-let doorOpened=false;
-let emojiAlpha=0;
-let counter=5;
-let counterInterval;
-let finalShown=false;
+const smallHeart = document.getElementById('smallHeart');
+const bigHeart = document.getElementById('bigHeart');
+const door = document.getElementById('door');
+const emoji = document.getElementById('emoji');
+const rose = document.getElementById('rose');
+const finalText = document.getElementById('finalText');
+const doorSound = document.getElementById('doorSound');
 
-function setup(){
-  createCanvas(windowWidth,windowHeight);
-  angleMode(DEGREES);
-  noStroke();
-}
+smallHeart.addEventListener('click',()=>{
+    smallHeart.style.display='none';
+    bigHeart.style.display='block';
+    setTimeout(()=>door.style.display='block',800);
+});
 
-function draw(){
-  background(0);
-  // Başlangıç dolu kalp
-  if(phase==='start'){
-    drawHeart(width/2,height/2,120,color(255,105,180));
-  }
-  // Patlayan kalp parçacıkları
-  else if(phase==='exploded'){
-    for(let p of heartParticles){
-      p.x += p.vx; p.y += p.vy; p.vy += 0.3;
-      fill(255,105,180,p.alpha);
-      ellipse(p.x,p.y,p.size);
-      p.alpha *=0.97;
-    }
-  }
-  // Büyük kalp + kapı yavaşça görünür
-  else if(phase==='bigHeart'){
-    drawHeart(width/2,height/2,250,color(255,105,180,bigHeartAlpha));
-    if(bigHeartAlpha<255) bigHeartAlpha+=2;
-    doorAlpha +=0.5; if(doorAlpha>255) doorAlpha=255;
-    showDoor();
-  }
-  // Emoji sahne
-  else if(phase==='emoji'){
-    drawHeart(width/2,height/2,250,color(255,105,180,255));
-    showDoor();
-    // Emoji
-    fill(255,255,0,emojiAlpha*255);
-    ellipse(width/2,height/2-40,50,50);
-    // Gül çizgisi
-    stroke(255,0,0,emojiAlpha*255);
-    strokeWeight(3);
-    line(width/2,height/2-40,width/2+10,height/2-50);
-    noStroke();
-  }
-}
-
-function mousePressed(){
-  if(phase==='start'){
-    explodeHeart();
-  } else if(phase==='bigHeart' && !doorOpened){
-    openDoor();
-  }
-}
-
-function drawHeart(x,y,s,col){
-  fill(col);
-  beginShape();
-  for(let t=0;t<360;t+=1){
-    let a = t;
-    let rad = PI/180*a;
-    let hx = 16*sin(rad)**3;
-    let hy = 13*cos(rad)-5*cos(2*rad)-2*cos(3*rad)-cos(4*rad);
-    vertex(x+hx*s/32,y-hy*s/32);
-  }
-  endShape(CLOSE);
-}
-
-function explodeHeart(){
-  phase='exploded';
-  for(let i=0;i<300;i++){
-    heartParticles.push({
-      x: width/2,
-      y: height/2,
-      vx: random(-6,6),
-      vy: random(-12,-3),
-      size: random(4,10),
-      alpha:255
-    });
-  }
-  setTimeout(()=>phase='bigHeart',900);
-}
-
-function showDoor(){
-  let door = document.getElementById('doorLabel');
-  door.style.display='block';
-  door.style.opacity = doorAlpha/255;
-}
-
-function openDoor(){
-  doorOpened=true;
-  let knocks=3;
-  let k=0;
-  let knockSound = ()=>{ 
-    let ctx = new (window.AudioContext||window.webkitAudioContext)();
-    let o = ctx.createOscillator();
-    let g = ctx.createGain();
-    o.type='square';
-    o.frequency.value=600;
-    g.gain.setValueAtTime(0.2,ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.2);
-    o.connect(g); g.connect(ctx.destination);
-    o.start(); o.stop(ctx.currentTime+0.2);
-  };
-  let interval = setInterval(()=>{
-    knockSound();
-    k++; if(k>=knocks) clearInterval(interval);
-  },300);
-  setTimeout(()=>{
-    phase='emoji';
-    emojiAlpha=0;
-    let fade = setInterval(()=>{
-      emojiAlpha +=0.02;
-      if(emojiAlpha>=1) clearInterval(fade);
-    },30);
-    startCounter();
-  },1000);
-}
-
-function startCounter(){
-  let counterDiv = document.getElementById('counter');
-  counterDiv.style.display='block';
-  counterInterval = setInterval(()=>{
-    counter--;
-    counterDiv.innerText=counter;
-    if(counter<=0){
-      clearInterval(counterInterval);
-      showFinal();
-    }
-  },1000);
-}
-
-function showFinal(){
-  finalShown=true;
-  document.getElementById('finalText').style.transform='translate(-50%,-50%) scale(1)';
-}
-
-function windowResized(){
-  resizeCanvas(windowWidth,windowHeight);
-}
+door.addEventListener('click',()=>{
+    doorSound.play();
+    setTimeout(()=>{
+        emoji.style.display='block';
+        rose.style.display='block';
+        rose.style.top = (emoji.offsetTop+30)+'px';
+        rose.style.left = (emoji.offsetLeft+20)+'px';
+        setTimeout(()=>finalText.style.display='block',1500);
+    },1000);
+});
 </script>
 </body>
 </html>
