@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aylinime Özell</title>
+<title>Aylinimm</title>
 <style>
 body {
   margin: 0;
@@ -83,10 +83,13 @@ body {
   transition: opacity 1.5s;
 }
 
-/* Lotus yaprak animasyonu */
 #lotus path {
   transform-origin: center;
   animation: sway 4s ease-in-out infinite alternate;
+}
+
+#lotus circle {
+  animation: pulse 2s ease-in-out infinite alternate;
 }
 
 #lotus g {
@@ -95,6 +98,7 @@ body {
 
 @keyframes sway {0%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}100%{transform:rotate(-2deg);}}
 @keyframes glow {0%{opacity:0.85;}50%{opacity:1;}100%{opacity:0.85;}}
+@keyframes pulse {0%{transform:scale(1);}50%{transform:scale(1.05);}100%{transform:scale(1);}}
 
 /* Teklif yazısı */
 #proposal-bar {
@@ -168,10 +172,11 @@ body {
   </defs>
   <g fill="url(#grad)" filter="url(#blur)">
     <!-- Gerçekçi çok katmanlı lotus yaprakları -->
-    <path d="M100,20 C115,50 155,50 125,90 C165,120 145,170 100,140 C55,170 35,120 75,90 C45,50 85,50 100,20 Z"/>
-    <path d="M100,30 C110,55 150,55 120,85 C155,115 135,160 100,130 C65,160 45,115 80,85 C55,55 95,55 100,30 Z"/>
-    <path d="M100,40 C108,60 148,60 118,80 C150,110 130,150 100,125 C70,150 50,110 82,80 C60,60 92,60 100,40 Z"/>
-    <circle cx="100" cy="100" r="15" fill="white"/>
+    <path d="M100,10 C120,40 160,40 130,80 C170,110 150,160 100,130 C50,160 30,110 70,80 C40,40 80,40 100,10 Z"/>
+    <path d="M100,20 C115,45 155,45 125,75 C160,105 140,155 100,125 C60,155 40,105 75,75 C50,45 90,45 100,20 Z"/>
+    <path d="M100,30 C110,50 150,50 120,70 C155,95 135,140 100,115 C65,140 45,95 80,70 C60,50 92,50 100,30 Z"/>
+    <!-- Sarı merkez -->
+    <circle cx="100" cy="100" r="12" fill="yellow"/>
   </g>
 </svg>
 </div>
@@ -231,8 +236,8 @@ function showBox(){
       // Kalpler lotus çıktıktan 3 saniye sonra kaybolacak
       setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
 
-      // Teklif mesajı lotus çıktıktan 4 saniye sonra
-      setTimeout(showProposal,4000);
+      // Teklif mesajı lotus çıktıktan 3 saniye sonra
+      setTimeout(showProposal,3000);
     },500);
   });
 }
@@ -242,7 +247,7 @@ setTimeout(typeWriter,2500);
 function showProposal(){
   const proposalBar=document.getElementById('proposal-bar');
   const proposalText=document.getElementById('proposal-text');
-  const text="Sevgilim olur musun birtanem?";
+  const text="Sevgilim olur musun Aylinim?";
   let j=0;
   proposalBar.style.display='block';
   function typeProposal(){
