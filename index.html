@@ -2,56 +2,192 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Aylin'ime Sürpriz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Final Animasyon</title>
 <style>
-body{margin:0;overflow:hidden;background:#000;display:flex;justify-content:center;align-items:center;flex-direction:column;}
-#smallHeart,#bigHeart,#door,#emoji,#rose{position:absolute;cursor:pointer;}
-#smallHeart{width:150px;height:150px;}
-#bigHeart{width:300px;height:300px;display:none;}
-#door{width:200px;height:400px;display:none;top:50%;left:50%;transform:translate(-50%,-50%);}
-#emoji{font-size:80px;display:none;top:50%;left:50%;transform:translate(-50%,-50%);}
-#rose{width:30px;height:30px;display:none;position:absolute;}
-#finalText{display:none;color:#ff5aa3;font-size:64px;text-align:center;margin-top:20px;}
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #f8d1dc; /* Toz pembe arka plan */
+  font-family: sans-serif;
+}
+#container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+canvas {
+  display: block;
+}
+.overlay-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 40%;
+  font-size: 2em;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  opacity: 1;
+}
 </style>
 </head>
 <body>
+<div id="container">
+  <div id="text" class="overlay-text">Kalbe tıklamak ister misin?</div>
+  <canvas id="canvas"></canvas>
+</div>
 
-<!-- Base64 görseller -->
-<img id="smallHeart" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAMAAADn0v8EAAAAM1BMVEUAAAD///+dnZ3V1dX8/Px/f38qKiozMzP09PS3t7fT09P19fX7+/vAwMC+vr6WlpbNzc1RUbFPAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABT0lEQVR4nO3YwQ6DIBBFUdG2G//9vSk3c9sgVJmef8GG8uGmQ0AAAAAAOAhDquyE8wfs+7uXzbs4QAAAMg/vL8AAGrEx/v+tAsZAAAAAElFTkSuQmCC">
-<img id="bigHeart" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARcAAAEWCAMAAAC0HgyWAAAAM1BMVEUAAAD///+dnZ3V1dX8/Px/f38qKiozMzP09PS3t7fT09P19fX7+/vAwMC+vr6WlpbNzc1RUbFPAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABRUlEQVR4nO3YQQ6DIBAF0ItkgP+/1nqSOKMqDJZtsvADAAAAAAAAAF+H/K+rG+/efk+09n0BAAAAAIC1v/AAAK7PzD3ev66YAAAAASUVORK5CYII=">
-<img id="door" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAM1BMVEUAAAD///+ZmZn8/PzV1dXo6Ojq6urx8fHLy8s+Pj4/Pz9/f38+Pj7+/vAwMD19fXLy8svlK0AAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABWUlEQVR4nO3YwQmAMAgEwQfT/59ZkchWJsPoyyx/AAAAAAAAADsU5TwIAACkDwwAApQPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDwwAcpwPDACnA8MAAKUDw0AgAEAIlVfY5wHnjUcQAAAAASUVORK5CYII=">
-
-<div id="emoji">😀</div>
-<img id="rose" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAMAAAAM7l6QAAAAM1BMVEUAAAD///+fn5+UlJS+vr7X19f7+/v8/Pzr6+vR0dHk5OTl5eXa2trb29vZ2dnNzc0xkAtbAAAADHRSTlMAEBAgIDAwMDAgIDAwMDZ0E0xAAABG0lEQVR4nO3RwQkAIAwAQeO0f7a2zA2KE5Vq1+MlXlz4AACA9I7/EBo3HeMjGBybCVJ0I0wnGjOBEo4MwrwDZCzFPCxAA4VxQ8JOKsEU4cRZTSLQfXH9uKHLIFbaAmiJXyOd2Cl2nFqRhh+ID8cl2ZoZlF/5tq0iG1AAAAAElFTkSuQmCC">
-
-<div id="finalText">Aylin'ime</div>
-
-<audio id="doorSound" src="data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAA... (kısa örnek ses base64)"></audio>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.14.0/gsap.min.js"></script>
 <script>
-const smallHeart = document.getElementById('smallHeart');
-const bigHeart = document.getElementById('bigHeart');
-const door = document.getElementById('door');
-const emoji = document.getElementById('emoji');
-const rose = document.getElementById('rose');
-const finalText = document.getElementById('finalText');
-const doorSound = document.getElementById('doorSound');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-smallHeart.addEventListener('click',()=>{
-    smallHeart.style.display='none';
-    bigHeart.style.display='block';
-    setTimeout(()=>door.style.display='block',800);
-});
+let stage = 0;
+let particles = [];
+let heartSize = 60;
+let doorSize = {w:150,h:250};
+let doorPos = {x:canvas.width/2, y:canvas.height/2};
+let lotusDrawn = false;
 
-door.addEventListener('click',()=>{
-    doorSound.play();
+// Particle class
+class Particle {
+  constructor(x,y,color){
+    this.x = x; this.y = y;
+    this.origX = x; this.origY = y;
+    this.vx = Math.random()*8-4; 
+    this.vy = Math.random()*8-4;
+    this.color = color;
+  }
+  update(){
+    if(stage>=1 && stage<2){
+      this.x += this.vx; this.y += this.vy;
+    } else if(stage>=2){
+      this.vx += (this.origX - this.x)*0.08;
+      this.vy += (this.origY - this.y)*0.08;
+      this.x += (this.origX - this.x)*0.08;
+      this.y += (this.origY - this.y)*0.08;
+    }
+  }
+  draw(ctx){
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x,this.y,4,4);
+  }
+}
+
+// Draw heart
+function drawHeart(cx,cy,size){
+  ctx.beginPath();
+  const top = size*0.3;
+  ctx.moveTo(cx,cy+top);
+  ctx.bezierCurveTo(cx+size/2,cy-size/2, cx+size*1.5,cy+size/3, cx,cy+size);
+  ctx.bezierCurveTo(cx-size*1.5,cy+size/3, cx-size/2,cy-size/2, cx,cy+top);
+  ctx.fillStyle = '#ff6fa2';
+  ctx.fill();
+}
+
+// Draw door
+function drawDoor(){
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 5;
+  ctx.strokeRect(doorPos.x-doorSize.w/2, doorPos.y-doorSize.h/2, doorSize.w, doorSize.h);
+  ctx.beginPath();
+  ctx.arc(doorPos.x+doorSize.w/2-20, doorPos.y, 10,0,Math.PI*2);
+  ctx.fillStyle='#fff';
+  ctx.fill();
+}
+
+// Draw lotus
+function drawLotus(){
+  const x = canvas.width/2;
+  const y = canvas.height/2;
+  ctx.fillStyle='white';
+  for(let i=0;i<8;i++){
+    ctx.beginPath();
+    ctx.ellipse(x,y,20,60,i*Math.PI/4,0,Math.PI*2);
+    ctx.fill();
+  }
+  ctx.beginPath();
+  ctx.arc(x,y,20,0,Math.PI*2);
+  ctx.fill();
+}
+
+// Animate loop
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  
+  if(stage===0){
+    drawHeart(canvas.width/2,canvas.height/2,heartSize);
+  }
+  
+  if(stage>=1){
+    particles.forEach(p=>{
+      p.update();
+      p.draw(ctx);
+    });
+  }
+  
+  if(stage===2){
+    drawDoor();
+  }
+  
+  if(stage===4 && lotusDrawn){
+    drawLotus();
+  }
+  
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Click handler
+canvas.addEventListener('click',()=>{
+  if(stage===0){
+    // Kalp patlaması
+    for(let i=0;i<300;i++){
+      particles.push(new Particle(canvas.width/2,canvas.height/2,'#ff6fa2'));
+    }
+    document.getElementById('text').style.opacity=0;
+    stage=1;
     setTimeout(()=>{
-        emoji.style.display='block';
-        rose.style.display='block';
-        rose.style.top = (emoji.offsetTop+30)+'px';
-        rose.style.left = (emoji.offsetLeft+20)+'px';
-        setTimeout(()=>finalText.style.display='block',1500);
-    },1000);
+      stage=2;
+      document.getElementById('text').innerText="Kapı çalıyor bitanem, açmıcak mısın?";
+      document.getElementById('text').style.opacity=1;
+    },800);
+  } else if(stage===2){
+    // Kapı açılıyor, kargocu ve paket
+    stage=3;
+    document.getElementById('text').style.opacity=0;
+    // Konuşma balonu
+    setTimeout(()=>{
+      document.getElementById('text').innerText="Aylin Hanım değil mi? Size bir paket var.";
+      document.getElementById('text').style.opacity=1;
+      setTimeout(()=>{
+        document.getElementById('text').style.opacity=0;
+        setTimeout(()=>{
+          document.getElementById('text').innerText="E hadi tıklasana kutuya.";
+          document.getElementById('text').style.opacity=1;
+          setTimeout(()=>{
+            document.getElementById('text').style.opacity=0;
+            stage=4;
+            lotusDrawn=true;
+            document.getElementById('text').innerText="Bu çiçek senin için bitanem";
+            document.getElementById('text').style.opacity=1;
+            // 3 saniye sonra patlama ve birleşme
+            setTimeout(()=>{
+              particles=[];
+              for(let i=0;i<400;i++){
+                particles.push(new Particle(canvas.width/2,canvas.height/2,'#fff'));
+              }
+            },3000);
+          },1000);
+        },500);
+      },1000);
+    },500);
+  }
 });
 </script>
 </body>
