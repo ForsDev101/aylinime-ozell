@@ -25,6 +25,7 @@ body {
   animation: fall linear forwards;
 }
 
+/* Kalpler animasyonu */
 @keyframes fall {
   0% { top: -50px; opacity: 0; }
   50% { opacity: 1; }
@@ -39,6 +40,7 @@ body {
   position: relative;
 }
 
+/* Dalgalı harfler */
 #name-text span {
   display: inline-block;
   position: relative;
@@ -67,7 +69,6 @@ body {
   font-size: 16px;
   overflow: hidden;
 }
-
 #chat-text::after { content:'|'; animation: blink 1s infinite; }
 @keyframes blink {0%,50%,100%{opacity:1} 25%,75%{opacity:0}}
 
@@ -79,16 +80,22 @@ body {
   transition: opacity 1s;
 }
 
-/* Gül çiçeği */
+/* Gerçekçi beyaz gül */
 #rose {
-  width: 350px;
+  width: 400px;
   max-width: 90vw;
-  height: 350px;
+  height: 400px;
   max-height: 90vw;
   margin-top: 20px;
   opacity: 0;
   transition: opacity 1.5s;
 }
+
+#rose path, #rose circle {
+  transform-origin: center center;
+  animation: sway 3s ease-in-out infinite alternate;
+}
+@keyframes sway {0%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}100%{transform:rotate(-2deg);}}
 
 /* Seçim yazısı */
 #proposal-bar {
@@ -152,21 +159,20 @@ body {
 <div id="box-emoji"></div>
 
 <div id="rose">
-<svg viewBox="0 0 200 200">
+<svg viewBox="0 0 400 400">
   <defs>
     <radialGradient id="roseGrad" cx="50%" cy="50%" r="50%">
       <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
       <stop offset="100%" style="stop-color:white;stop-opacity:0"/>
     </radialGradient>
+    <filter id="blurRose"><feGaussianBlur in="SourceGraphic" stdDeviation="0.8"/></filter>
   </defs>
-  <g fill="url(#roseGrad)">
-    <!-- Yapraklar -->
-    <path d="M100,10 C130,40 160,60 130,90 C160,120 140,160 100,140 C60,160 40,120 70,90 C40,60 70,40 100,10 Z"/>
-    <path d="M100,20 C125,45 155,65 125,85 C155,115 135,155 100,135 C65,155 45,115 75,85 C45,65 75,45 100,20 Z"/>
-    <!-- Sarı merkez -->
-    <circle cx="100" cy="100" r="12" fill="yellow"/>
-    <!-- Gövde -->
-    <rect x="95" y="140" width="10" height="60" fill="green"/>
+  <g fill="url(#roseGrad)" filter="url(#blurRose)">
+    <!-- Çok yapraklı gerçekçi gül -->
+    <path d="M200,50 C220,90 260,90 230,150 C270,200 240,280 200,250 C160,280 130,200 170,150 C140,90 180,90 200,50 Z"/>
+    <path d="M200,60 C215,95 255,95 225,145 C265,190 240,260 200,230 C160,260 135,190 175,145 C145,95 185,95 200,60 Z"/>
+    <path d="M200,70 C210,100 250,100 220,140 C260,180 240,250 200,220 C160,250 140,180 180,140 C150,100 190,100 200,70 Z"/>
+    <circle cx="200" cy="200" r="15" fill="yellow"/>
   </g>
 </svg>
 </div>
@@ -218,12 +224,16 @@ function showBox(){
   const box=document.getElementById("box-emoji");
   box.textContent='📦';
   box.addEventListener('click',()=>{
+    // Yazıyı kaldır
+    document.getElementById("chat-text").innerHTML="";
     box.style.opacity=0;
     setTimeout(()=>{
       document.getElementById('rose').style.opacity=1;
       // Kalpler 3 saniye sonra kaybolacak
-      setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
-      // Gül çıktıktan 3 saniye sonra Sevgilim olur musun mesajı
+      setTimeout(()=>{
+        hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});
+      },3000);
+      // Gül çıktıktan 3 saniye sonra sevgilim mesajı
       setTimeout(showProposal,3000);
     },500);
   });
@@ -259,6 +269,7 @@ function showButtons(){
 
 // Cevabı işleme
 function handleAnswer(answer){
+  localStorage.setItem('answer',answer);
   document.getElementById('buttons').style.display='none';
   document.getElementById('proposal-bar').style.display='none';
   if(answer==='evet'){showConfetti();}
