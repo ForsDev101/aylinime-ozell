@@ -76,10 +76,10 @@ body {
   transition: opacity 1s;
 }
 
-/* Beyaz Çiçek */
+/* Gerçekçi çiçek */
 #flower {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   margin-top: 20px;
   opacity: 0;
   transition: opacity 1.5s;
@@ -137,7 +137,7 @@ body {
   #big-heart{font-size:80px;}
   #chat-bar,#proposal-bar{width:90%; font-size:14px;}
   .falling-heart{font-size:18px;}
-  #flower{width:150px;height:150px;}
+  #flower{width:200px;height:200px;}
   #result{font-size:60px;}
 }
 </style>
@@ -154,14 +154,10 @@ body {
 <div id="flower">
 <svg viewBox="0 0 200 200">
   <g fill="white">
-    <!-- Basit beyaz çiçek yaprakları -->
-    <circle cx="100" cy="100" r="20"/>
-    <circle cx="120" cy="100" r="20"/>
-    <circle cx="80" cy="100" r="20"/>
-    <circle cx="100" cy="80" r="20"/>
-    <circle cx="100" cy="120" r="20"/>
-    <circle cx="115" cy="115" r="20"/>
-    <circle cx="85" cy="85" r="20"/>
+    <!-- Çok yapraklı beyaz çiçek -->
+    <path d="M100,50 C120,40 140,60 120,80 C140,100 120,120 100,100 C80,120 60,100 80,80 C60,60 80,40 100,50 Z"/>
+    <path d="M100,60 C115,50 135,70 115,90 C135,110 115,130 100,110 C85,130 65,110 85,90 C65,70 85,50 100,60 Z"/>
+    <circle cx="100" cy="100" r="15" fill="yellow"/>
   </g>
 </svg>
 </div>
@@ -174,8 +170,10 @@ body {
 
 <div id="result"></div>
 
-<!-- YouTube müzik embed, sayfa açılır açılmaz çalacak -->
-<iframe width="0" height="0" src="https://www.youtube.com/embed/dAr1olA513s?autoplay=1&loop=1&playlist=dAr1olA513s" allow="autoplay" frameborder="0"></iframe>
+<!-- Müzik hemen çalacak -->
+<audio id="music" autoplay loop>
+  <source src="YOUTUBE_LINK_BURAYA" type="audio/mp3">
+</audio>
 
 <script>
 // Küçük kalpler
@@ -249,7 +247,7 @@ function showButtons(){
   const buttons=document.getElementById('buttons');
   buttons.style.display='block';
   const evetBtn=document.getElementById('evet');
-  const hayirBtn=document.getElementById('hayır');
+  const hayirBtn=document.getElementById('hayir');
   evetBtn.addEventListener('click',()=>handleAnswer('evet'));
   hayirBtn.addEventListener('click',()=>handleAnswer('hayır'));
 }
