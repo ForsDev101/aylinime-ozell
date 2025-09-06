@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalp, Lotus ve Seçim Animasyonu</title>
+<title>Aylinime Özell</title>
 <style>
 body {
   margin: 0;
@@ -22,13 +22,13 @@ body {
   position: absolute;
   font-size: 24px;
   color: pink;
-  animation: fall linear forwards;
+  animation: fall linear infinite;
+  opacity: 1;
 }
 
 @keyframes fall {
-  0% { top: -50px; opacity: 0; }
-  50% { opacity: 1; }
-  100% { top: 60%; opacity: 0; }
+  0% { top: -50px; }
+  100% { top: 60%; }
 }
 
 /* Büyük kalp */
@@ -45,13 +45,6 @@ body {
   color: white;
   animation: wave 1s infinite;
 }
-
-#name-text span:nth-child(1){ animation-delay: 0s; }
-#name-text span:nth-child(2){ animation-delay: 0.1s; }
-#name-text span:nth-child(3){ animation-delay: 0.2s; }
-#name-text span:nth-child(4){ animation-delay: 0.3s; }
-#name-text span:nth-child(5){ animation-delay: 0.4s; }
-#name-text span:nth-child(6){ animation-delay: 0.5s; }
 
 @keyframes wave { 0%,100% { top:0 } 50% { top:-15px } }
 
@@ -81,18 +74,19 @@ body {
 
 /* Lotus çiçeği */
 #lotus {
-  width: 350px;
+  width: 400px;
   max-width: 90vw;
-  height: 350px;
+  height: 400px;
   max-height: 90vw;
   margin-top: 20px;
   opacity: 0;
   transition: opacity 1.5s;
 }
 
-#lotus path, #lotus circle {
-  transform-origin: 100px 100px;
-  animation: sway 3s ease-in-out infinite alternate;
+/* Lotus yaprak animasyonu */
+#lotus path {
+  transform-origin: center;
+  animation: sway 4s ease-in-out infinite alternate;
 }
 
 #lotus g {
@@ -173,7 +167,7 @@ body {
     <filter id="blur"><feGaussianBlur in="SourceGraphic" stdDeviation="1"/></filter>
   </defs>
   <g fill="url(#grad)" filter="url(#blur)">
-    <!-- Çok detaylı lotus yaprakları -->
+    <!-- Gerçekçi çok katmanlı lotus yaprakları -->
     <path d="M100,20 C115,50 155,50 125,90 C165,120 145,170 100,140 C55,170 35,120 75,90 C45,50 85,50 100,20 Z"/>
     <path d="M100,30 C110,55 150,55 120,85 C155,115 135,160 100,130 C65,160 45,115 80,85 C55,55 95,55 100,30 Z"/>
     <path d="M100,40 C108,60 148,60 118,80 C150,110 130,150 100,125 C70,150 50,110 82,80 C60,60 92,60 100,40 Z"/>
@@ -215,7 +209,7 @@ nameText.split('').forEach(char=>{
 setTimeout(()=>{document.getElementById('big-heart').style.opacity=1;},2000);
 
 // Sohbet yazısı
-const chatString="Kutuya tıklamak ister misin bitanem?";
+const chatString="Kutuya tıklamak ister misin birtanem?";
 let i=0;
 const chatText=document.getElementById("chat-text");
 function typeWriter(){
@@ -237,8 +231,8 @@ function showBox(){
       // Kalpler lotus çıktıktan 3 saniye sonra kaybolacak
       setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
 
-      // Teklif mesajı lotus çıktıktan 2 saniye sonra
-      setTimeout(showProposal,2000);
+      // Teklif mesajı lotus çıktıktan 4 saniye sonra
+      setTimeout(showProposal,4000);
     },500);
   });
 }
@@ -248,7 +242,7 @@ setTimeout(typeWriter,2500);
 function showProposal(){
   const proposalBar=document.getElementById('proposal-bar');
   const proposalText=document.getElementById('proposal-text');
-  const text="Sevgilim olur musun bitanem?";
+  const text="Sevgilim olur musun birtanem?";
   let j=0;
   proposalBar.style.display='block';
   function typeProposal(){
