@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalp, Gül ve Seçim Animasyonu</title>
+<title>Kalp, Çiçek ve Mesaj Animasyonu</title>
 <style>
 body {
   margin: 0;
@@ -76,15 +76,15 @@ body {
   transition: opacity 1s;
 }
 
-/* Gül */
-#rose {
-  width: 300px;
-  height: 300px;
+/* Beyaz Çiçek */
+#flower {
+  width: 200px;
+  height: 200px;
   margin-top: 20px;
   opacity: 0;
   transition: opacity 1.5s;
 }
-#rose path {
+#flower path {
   transform-origin: center center;
   animation: sway 3s ease-in-out infinite alternate;
 }
@@ -137,7 +137,7 @@ body {
   #big-heart{font-size:80px;}
   #chat-bar,#proposal-bar{width:90%; font-size:14px;}
   .falling-heart{font-size:18px;}
-  #rose{width:200px;height:200px;}
+  #flower{width:150px;height:150px;}
   #result{font-size:60px;}
 }
 </style>
@@ -151,23 +151,17 @@ body {
 <div id="chat-bar"><span id="chat-text"></span></div>
 <div id="box-emoji"></div>
 
-<div id="rose">
+<div id="flower">
 <svg viewBox="0 0 200 200">
-  <defs>
-    <radialGradient id="roseGrad" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
-      <stop offset="100%" style="stop-color:white;stop-opacity:1"/>
-    </radialGradient>
-  </defs>
-  <g fill="url(#roseGrad)">
-    <!-- Çok yapraklı beyaz gül -->
-    <path d="M100,100 m-25,0 a25,25 0 1,0 50,0 a25,25 0 1,0 -50,0" />
-    <path d="M100,90 m-20,0 a20,20 0 1,0 40,0 a20,20 0 1,0 -40,0" />
-    <path d="M100,80 m-15,0 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0" />
-    <path d="M100,70 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0" />
-    <path d="M100,65 m-7,0 a7,7 0 1,0 14,0 a7,7 0 1,0 -14,0" />
-    <!-- Kısa yeşil dal -->
-    <rect x="98" y="100" width="4" height="50" fill="green"/>
+  <g fill="white">
+    <!-- Basit beyaz çiçek yaprakları -->
+    <circle cx="100" cy="100" r="20"/>
+    <circle cx="120" cy="100" r="20"/>
+    <circle cx="80" cy="100" r="20"/>
+    <circle cx="100" cy="80" r="20"/>
+    <circle cx="100" cy="120" r="20"/>
+    <circle cx="115" cy="115" r="20"/>
+    <circle cx="85" cy="85" r="20"/>
   </g>
 </svg>
 </div>
@@ -180,10 +174,8 @@ body {
 
 <div id="result"></div>
 
-<!-- YouTube müzik embed -->
-<div id="music-container" style="display:none;">
-  <iframe width="0" height="0" src="https://www.youtube.com/embed/dAr1olA513s?autoplay=1&loop=1&playlist=dAr1olA513s" title="Yapboz - Yaz Gecesi" allow="autoplay" frameborder="0"></iframe>
-</div>
+<!-- YouTube müzik embed, sayfa açılır açılmaz çalacak -->
+<iframe width="0" height="0" src="https://www.youtube.com/embed/dAr1olA513s?autoplay=1&loop=1&playlist=dAr1olA513s" allow="autoplay" frameborder="0"></iframe>
 
 <script>
 // Küçük kalpler
@@ -225,14 +217,10 @@ function showBox(){
   box.textContent='📦';
   box.addEventListener('click',()=>{
     box.style.opacity=0;
-    chatText.innerHTML=''; // Yazıyı sil
-    // YouTube müziği başlat
-    document.getElementById('music-container').style.display='block';
+    chatText.innerHTML=''; // yazıyı sil
     setTimeout(()=>{
-      document.getElementById('rose').style.opacity=1;
-      // Kalpler 3 saniye sonra kaybolacak
+      document.getElementById('flower').style.opacity=1;
       setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
-      // Gül çıktıktan sonra mesaj 3 saniye sonra
       setTimeout(showProposal,3000);
     },500);
   });
@@ -261,7 +249,7 @@ function showButtons(){
   const buttons=document.getElementById('buttons');
   buttons.style.display='block';
   const evetBtn=document.getElementById('evet');
-  const hayirBtn=document.getElementById('hayir');
+  const hayirBtn=document.getElementById('hayır');
   evetBtn.addEventListener('click',()=>handleAnswer('evet'));
   hayirBtn.addEventListener('click',()=>handleAnswer('hayır'));
 }
