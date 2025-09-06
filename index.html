@@ -31,7 +31,7 @@ body {
   100% { top: 60%; opacity: 0; }
 }
 
-/* Büyük kalp */
+/* Büyük kırmızı kalp ve dalgalı harf */
 #big-heart {
   font-size: 120px;
   color: red;
@@ -79,26 +79,28 @@ body {
   transition: opacity 1s;
 }
 
-/* Gül çiçeği */
+/* Gül */
 #rose {
-  width: 400px;
+  width: 350px;
   max-width: 90vw;
-  height: 400px;
-  max-height: 90vw;
   margin-top: 20px;
   opacity: 0;
   transition: opacity 1.5s;
 }
 
-#rose path {
-  transform-origin: 200px 200px;
-  animation: sway 3s ease-in-out infinite alternate;
+#rose img {
+  width: 100%;
+  transform: rotateY(10deg);
+  animation: sway 4s ease-in-out infinite alternate;
 }
 
-/* Dalgalanma animasyonu */
-@keyframes sway {0%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}100%{transform:rotate(-2deg);}}
+@keyframes sway {
+  0% { transform: rotateY(8deg) rotateZ(-2deg);}
+  50% { transform: rotateY(12deg) rotateZ(2deg);}
+  100% { transform: rotateY(8deg) rotateZ(-2deg);}
+}
 
-/* Seçim yazısı */
+/* Sevgilim olur musun mesajı */
 #proposal-bar {
   margin-top: 20px;
   border: 2px solid pink;
@@ -111,6 +113,7 @@ body {
   overflow: hidden;
   display: none;
 }
+
 #proposal-text::after { content:'|'; animation: blink 1s infinite; }
 
 /* Evet/Hayır butonları */
@@ -145,45 +148,42 @@ body {
   #big-heart{font-size:80px;}
   #chat-bar,#proposal-bar{width:90%; font-size:14px;}
   .falling-heart{font-size:18px;}
-  #rose{width:250px;height:250px;}
+  #rose{width:250px;}
   #result{font-size:60px;}
 }
 </style>
 </head>
 <body>
 
+<!-- Kalpler -->
 <div id="hearts-container"></div>
 
+<!-- Büyük kalp ve dalgalı A Y L I N -->
 <div id="big-heart"><div id="name-text"></div></div>
 
+<!-- Sohbet ve kutu -->
 <div id="chat-bar"><span id="chat-text"></span></div>
 <div id="box-emoji"></div>
 
-<div id="rose">
-<svg viewBox="0 0 400 400">
-  <defs>
-    <radialGradient id="grad-rose" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:white;stop-opacity:1"/>
-      <stop offset="100%" style="stop-color:white;stop-opacity:1"/>
-    </radialGradient>
-  </defs>
-  <g>
-    <!-- Gül yaprakları -->
-    <path d="M200,200 C220,150 280,150 240,220 C300,260 260,320 200,280 C140,320 100,260 160,220 C120,150 180,150 200,200 Z" fill="white"/>
-    <path d="M200,200 C210,160 270,160 230,210 C290,250 250,310 200,270 C150,310 110,250 170,210 C130,160 190,160 200,200 Z" fill="white"/>
-    <path d="M200,200 C205,170 260,170 220,200 C280,240 240,300 200,260 C160,300 120,240 180,200 C140,170 195,170 200,200 Z" fill="white"/>
-    <circle cx="200" cy="200" r="20" fill="yellow"/>
-  </g>
-</svg>
-</div>
+<!-- Gül -->
+<div id="rose"><img src="rose_4k_side.png" alt="Gül"></div>
 
+<!-- Sevgilim olur musun mesajı -->
 <div id="proposal-bar"><span id="proposal-text"></span></div>
+
+<!-- Evet/Hayır -->
 <div id="buttons">
   <button id="evet">Evet</button>
   <button id="hayir">Hayır</button>
 </div>
 
+<!-- Sonuç -->
 <div id="result"></div>
+
+<!-- Müzik -->
+<audio id="bg-music" autoplay loop>
+  <source src="Yapboz_Yaz_Gecesi.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 // Küçük kalpler
@@ -225,19 +225,19 @@ function showBox(){
   box.textContent='📦';
   box.addEventListener('click',()=>{
     box.style.opacity=0;
-    chatText.innerHTML=''; // Sohbet yazısını kaybettir
+    chatText.innerHTML=''; // kutuya tıklandığında yazı kaybolur
     setTimeout(()=>{
       document.getElementById('rose').style.opacity=1;
-      // Kalpler 3 saniye sonra kaybolacak
+      // Kalpler gül geldikten 3 saniye sonra kaybolacak
       setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
-      // Gül çıktıktan sonra mesaj 3 saniye gecikmeli
+      // Gül çıktıktan 3 saniye sonra Sevgilim mesajı
       setTimeout(showProposal,3000);
     },500);
   });
 }
 setTimeout(typeWriter,2500);
 
-// Sevgilim olur musun yazısı
+// Sevgilim olur musun mesajı
 function showProposal(){
   const proposalBar=document.getElementById('proposal-bar');
   const proposalText=document.getElementById('proposal-text');
