@@ -1,289 +1,112 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalp, Çiçek ve Mesaj Animasyonu</title>
-<style>
-body {
-  margin: 0;
-  background-color: black;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  font-family: sans-serif;
-}
-
-/* Küçük kalpler */
-.falling-heart {
-  position: absolute;
-  font-size: 24px;
-  color: pink;
-  animation: fall linear forwards;
-}
-@keyframes fall {
-  0% { top: -50px; opacity: 0; }
-  50% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-/* Büyük kalp */
-#big-heart {
-  font-size: 120px;
-  color: red;
-  opacity: 0;
-  position: relative;
-}
-
-/* Dalgalı A Y L I N yazısı */
-#name-text span {
-  display: inline-block;
-  position: relative;
-  color: white;
-  animation: wave 1s infinite;
-}
-#name-text span:nth-child(1){ animation-delay: 0s; }
-#name-text span:nth-child(2){ animation-delay: 0.1s; }
-#name-text span:nth-child(3){ animation-delay: 0.2s; }
-#name-text span:nth-child(4){ animation-delay: 0.3s; }
-#name-text span:nth-child(5){ animation-delay: 0.4s; }
-#name-text span:nth-child(6){ animation-delay: 0.5s; }
-@keyframes wave { 0%,100% { top:0 } 50% { top:-15px } }
-
-/* Sohbet barı */
-#chat-bar {
-  margin-top: 20px;
-  border: 2px solid pink;
-  padding: 10px;
-  width: 80%;
-  max-width: 300px;
-  border-radius: 10px;
-  color: white;
-  font-size: 16px;
-  overflow: hidden;
-}
-#chat-text::after { content:'|'; animation: blink 1s infinite; }
-@keyframes blink {0%,50%,100%{opacity:1} 25%,75%{opacity:0}}
-
-/* Kutucuk emoji */
-#box-emoji {
-  font-size: 40px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: opacity 1s;
-}
-
-/* Gerçekçi çiçek */
-#flower {
-  width: 250px;
-  height: 250px;
-  margin-top: 20px;
-  opacity: 0;
-  transition: opacity 1.5s;
-}
-#flower path {
-  transform-origin: center center;
-  animation: sway 3s ease-in-out infinite alternate;
-}
-@keyframes sway {0%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}100%{transform:rotate(-2deg);}}
-
-/* Seçim yazısı */
-#proposal-bar {
-  margin-top: 20px;
-  border: 2px solid pink;
-  padding: 10px;
-  width: 80%;
-  max-width: 300px;
-  border-radius: 10px;
-  color: white;
-  font-size: 16px;
-  overflow: hidden;
-  display: none;
-}
-#proposal-text::after { content:'|'; animation: blink 1s infinite; }
-
-/* Evet/Hayır butonları */
-#buttons { margin-top:10px; display:none; }
-#buttons button {
-  padding: 10px 20px;
-  margin: 5px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:16px;
-  font-weight:bold;
-  transition:0.3s;
-}
-#buttons button:hover { transform:scale(1.1); }
-#buttons #evet { background-color:#ff69b4; color:white; }
-#buttons #hayir { background-color:#555; color:white; }
-
-/* Sonuç emojileri */
-#result { font-size:100px; margin-top:20px; display:none; }
-
-/* Konfeti animasyonu */
-.confetti {
-  position:absolute;
-  font-size:24px;
-  animation: confetti-fall linear forwards;
-}
-@keyframes confetti-fall {0%{top:-50px; opacity:1} 100%{top:100%; opacity:0}}
-
-/* Responsive */
-@media (max-width:500px){
-  #big-heart{font-size:80px;}
-  #chat-bar,#proposal-bar{width:90%; font-size:14px;}
-  .falling-heart{font-size:18px;}
-  #flower{width:200px;height:200px;}
-  #result{font-size:60px;}
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Özür Dilerim</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .main-text {
+      font-size: 60px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 15px #fff;
+      animation: slideFade 4s infinite;
+      margin-top: 100px;
+    }
+    @keyframes slideFade {
+      0% {opacity: 0; transform: translateX(-100px);}
+      50% {opacity: 1; transform: translateX(0);}
+      100% {opacity: 0; transform: translateX(100px);}
+    }
+    .sub-text {
+      font-size: 18px;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+      animation-delay: 2s;
+      max-width: 600px;
+      margin: 20px auto;
+      line-height: 1.5;
+    }
+    @keyframes fadeIn {
+      to {opacity: 1;}
+    }
+    .sad-emoji {
+      position: absolute;
+      top: -50px;
+      font-size: 24px;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% {transform: translateY(-50px); opacity: 1;}
+      100% {transform: translateY(100vh); opacity: 0;}
+    }
+    .a-letter {
+      position: absolute;
+      font-size: 12px;
+      color: white;
+      opacity: 0;
+      animation: aFade 2s ease-in-out forwards;
+    }
+    @keyframes aFade {
+      0% {opacity: 0;}
+      25% {opacity: 1;}
+      75% {opacity: 1;}
+      100% {opacity: 0;}
+    }
+    .bottom-text {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      font-size: 16px;
+      color: #fff;
+      padding: 0 10px;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
+  <div class="main-text">Özür Dilerim</div>
+  <div class="sub-text">🤍 Özür dilerim bitanem, senden başkasıyla konuşmamalıydım. Bir mallık edip seni tekrar kırdım. Kendimi affedemem ama belki sen affedersin. Hatamı anladım bitanem, çok özür dilerim...</div>
+  <div class="bottom-text"></div>
 
-<div id="hearts-container"></div>
+  <!-- MP3 otomatik çalma -->
+  <audio autoplay loop>
+    <source src="https://mp3semti.com/Murad-Arif-Samanyolu-Bir-Sarkisin-Sen.html" type="audio/mpeg">
+    Tarayıcınız audio etiketini desteklemiyor.
+  </audio>
 
-<div id="big-heart"><div id="name-text"></div></div>
+  <script>
+    // 😔 yağmur emojileri
+    function createSadEmoji() {
+      const emoji = document.createElement("div");
+      emoji.classList.add("sad-emoji");
+      emoji.textContent = "😔";
+      emoji.style.left = Math.random() * window.innerWidth + "px";
+      emoji.style.animationDuration = (3 + Math.random() * 2) + "s";
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 5000);
+    }
+    setInterval(createSadEmoji, 500);
 
-<div id="chat-bar"><span id="chat-text"></span></div>
-<div id="box-emoji"></div>
-
-<div id="flower">
-<svg viewBox="0 0 200 200">
-  <g fill="white">
-    <!-- Çok yapraklı beyaz çiçek -->
-    <path d="M100,50 C120,40 140,60 120,80 C140,100 120,120 100,100 C80,120 60,100 80,80 C60,60 80,40 100,50 Z"/>
-    <path d="M100,60 C115,50 135,70 115,90 C135,110 115,130 100,110 C85,130 65,110 85,90 C65,70 85,50 100,60 Z"/>
-    <circle cx="100" cy="100" r="15" fill="yellow"/>
-  </g>
-</svg>
-</div>
-
-<div id="proposal-bar"><span id="proposal-text"></span></div>
-<div id="buttons">
-  <button id="evet">Evet</button>
-  <button id="hayir">Hayır</button>
-</div>
-
-<div id="result"></div>
-
-<!-- Müzik hemen çalacak -->
-<audio id="music" autoplay loop>
-  <source src="YOUTUBE_LINK_BURAYA" type="audio/mp3">
-</audio>
-
-<script>
-// Küçük kalpler
-const heartContainer=document.getElementById('hearts-container');
-const hearts=[];
-for(let i=0;i<20;i++){
-  const heart=document.createElement('span');
-  heart.classList.add('falling-heart');
-  heart.style.left=Math.random()*window.innerWidth+'px';
-  heart.style.animationDuration=2+Math.random()*2+'s';
-  heart.textContent='❤️';
-  heartContainer.appendChild(heart);
-  hearts.push(heart);
-}
-
-// Büyük kalp ve dalgalı harf
-const nameText='A Y L I N';
-const nameTextContainer=document.getElementById('name-text');
-nameText.split('').forEach(char=>{
-  const span=document.createElement('span');
-  span.textContent=char===' ' ? '\u00A0' : char;
-  nameTextContainer.appendChild(span);
-});
-setTimeout(()=>{document.getElementById('big-heart').style.opacity=1;},2000);
-
-// Sohbet yazısı
-const chatString="Kutuya tıklamak ister misin bitanem?";
-let i=0;
-const chatText=document.getElementById("chat-text");
-function typeWriter(){
-  if(i<chatString.length){
-    chatText.innerHTML+=chatString.charAt(i);
-    i++;
-    setTimeout(typeWriter,100);
-  }else{showBox();}
-}
-function showBox(){
-  const box=document.getElementById("box-emoji");
-  box.textContent='📦';
-  box.addEventListener('click',()=>{
-    box.style.opacity=0;
-    chatText.innerHTML=''; // yazıyı sil
-    setTimeout(()=>{
-      document.getElementById('flower').style.opacity=1;
-      setTimeout(()=>{hearts.forEach(h=>{h.style.transition="opacity 1s";h.style.opacity=0;});},3000);
-      setTimeout(showProposal,3000);
-    },500);
-  });
-}
-setTimeout(typeWriter,2500);
-
-// Sevgilim mesajı
-function showProposal(){
-  const proposalBar=document.getElementById('proposal-bar');
-  const proposalText=document.getElementById('proposal-text');
-  const text="Aylinim, birtanem ilk günden beri seni seviyorum, tek bir an bile aklımdan çıkmadın ve çıkmayacaksın da. Eğer istersen sevgilim olur musun?";
-  let j=0;
-  proposalBar.style.display='block';
-  function typeProposal(){
-    if(j<text.length){
-      proposalText.innerHTML+=text.charAt(j);
-      j++;
-      setTimeout(typeProposal,50);
-    }else{showButtons();}
-  }
-  typeProposal();
-}
-
-// Evet/Hayır butonları
-function showButtons(){
-  const buttons=document.getElementById('buttons');
-  buttons.style.display='block';
-  const evetBtn=document.getElementById('evet');
-  const hayirBtn=document.getElementById('hayir');
-  evetBtn.addEventListener('click',()=>handleAnswer('evet'));
-  hayirBtn.addEventListener('click',()=>handleAnswer('hayır'));
-}
-
-// Cevabı işleme
-function handleAnswer(answer){
-  localStorage.setItem('answer',answer);
-  document.getElementById('buttons').style.display='none';
-  document.getElementById('proposal-bar').style.display='none';
-  if(answer==='evet'){showConfetti();}
-  else{showCry();}
-}
-
-// Ağlama
-function showCry(){
-  const result=document.getElementById('result');
-  result.textContent='😭';
-  result.style.display='block';
-}
-
-// Konfeti
-function showConfetti(){
-  const colors=['🎉','✨','💖','🌸','💫'];
-  for(let i=0;i<50;i++){
-    const c=document.createElement('span');
-    c.classList.add('confetti');
-    c.textContent=colors[Math.floor(Math.random()*colors.length)];
-    c.style.left=Math.random()*window.innerWidth+'px';
-    c.style.animationDuration=2+Math.random()*2+'s';
-    document.body.appendChild(c);
-    setTimeout(()=>{c.remove();},4000);
-  }
-  const result=document.getElementById('result');
-  result.textContent='🎊';
-  result.style.display='block';
-}
-</script>
+    // A harfleri
+    function createALetter() {
+      const letter = document.createElement("div");
+      letter.classList.add("a-letter");
+      letter.textContent = "A";
+      letter.style.left = Math.random() * window.innerWidth + "px";
+      letter.style.top = Math.random() * window.innerHeight + "px";
+      document.body.appendChild(letter);
+      setTimeout(() => letter.remove(), 2000);
+    }
+    setInterval(createALetter, 1000);
+  </script>
 </body>
 </html>
