@@ -1,112 +1,91 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Özür Dilerim</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: black;
-      color: white;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    .main-text {
-      font-size: 60px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 0 0 15px #fff;
-      animation: slideFade 4s infinite;
-      margin-top: 100px;
-    }
-    @keyframes slideFade {
-      0% {opacity: 0; transform: translateX(-100px);}
-      50% {opacity: 1; transform: translateX(0);}
-      100% {opacity: 0; transform: translateX(100px);}
-    }
-    .sub-text {
-      font-size: 18px;
-      opacity: 0;
-      animation: fadeIn 2s ease forwards;
-      animation-delay: 2s;
-      max-width: 600px;
-      margin: 20px auto;
-      line-height: 1.5;
-    }
-    @keyframes fadeIn {
-      to {opacity: 1;}
-    }
-    .sad-emoji {
-      position: absolute;
-      top: -50px;
-      font-size: 24px;
-      animation: fall linear infinite;
-    }
-    @keyframes fall {
-      0% {transform: translateY(-50px); opacity: 1;}
-      100% {transform: translateY(100vh); opacity: 0;}
-    }
-    .a-letter {
-      position: absolute;
-      font-size: 12px;
-      color: white;
-      opacity: 0;
-      animation: aFade 2s ease-in-out forwards;
-    }
-    @keyframes aFade {
-      0% {opacity: 0;}
-      25% {opacity: 1;}
-      75% {opacity: 1;}
-      100% {opacity: 0;}
-    }
-    .bottom-text {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      font-size: 16px;
-      color: #fff;
-      padding: 0 10px;
-      line-height: 1.6;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Sürpriz Yolculuk</title>
+<style>
+  * {margin:0; padding:0; box-sizing:border-box;}
+  body, html {width:100%; height:100%; overflow:hidden; font-family: Arial, sans-serif; background:black; color:white;}
+  #start, #journey, #finished, #showroom, #blackout {position:absolute; width:100%; height:100%; display:flex; justify-content:center; align-items:center; flex-direction:column;}
+  button {padding:15px 30px; font-size:20px; border:none; border-radius:10px; cursor:pointer; backdrop-filter: blur(5px); background: rgba(255,255,255,0.1); color:white; margin:10px;}
+  #placeButtons {display:flex; gap:15px; margin-bottom:20px;}
+  #placeImage {max-width:80%; max-height:60%; border-radius:15px;}
+  #showroom img {max-width:80%; max-height:60%; border-radius:15px;}
+  #blackout {background:black; justify-content:center; align-items:center; display:none;}
+  #blackout span {font-size:2em;}
+</style>
 </head>
 <body>
-  <div class="main-text">Özür Dilerim</div>
-  <div class="sub-text">🤍 Özür dilerim bitanem, senden başkasıyla konuşmamalıydım. Bir mallık edip seni tekrar kırdım. Kendimi affedemem ama belki sen affedersin. Hatamı anladım bitanem, çok özür dilerim...</div>
-  <div class="bottom-text"></div>
 
-  <!-- MP3 otomatik çalma -->
-  <audio autoplay loop>
-    <source src="https://mp3semti.com/Murad-Arif-Samanyolu-Bir-Sarkisin-Sen.html" type="audio/mpeg">
-    Tarayıcınız audio etiketini desteklemiyor.
-  </audio>
+<!-- Başlangıç ekranı -->
+<div id="start">
+  <button onclick="startJourney()">Yolculuğa Başla</button>
+</div>
 
-  <script>
-    // 😔 yağmur emojileri
-    function createSadEmoji() {
-      const emoji = document.createElement("div");
-      emoji.classList.add("sad-emoji");
-      emoji.textContent = "😔";
-      emoji.style.left = Math.random() * window.innerWidth + "px";
-      emoji.style.animationDuration = (3 + Math.random() * 2) + "s";
-      document.body.appendChild(emoji);
-      setTimeout(() => emoji.remove(), 5000);
-    }
-    setInterval(createSadEmoji, 500);
+<!-- Yolculuk ekranı -->
+<div id="journey">
+  <div id="placeButtons">
+    <button onclick="selectPlace(0)">London Eye</button>
+    <button onclick="selectPlace(1)">Tower Bridge</button>
+    <button onclick="selectPlace(2)">Oxford Street</button>
+  </div>
+  <img id="placeImage" src="" alt="Place">
+</div>
 
-    // A harfleri
-    function createALetter() {
-      const letter = document.createElement("div");
-      letter.classList.add("a-letter");
-      letter.textContent = "A";
-      letter.style.left = Math.random() * window.innerWidth + "px";
-      letter.style.top = Math.random() * window.innerHeight + "px";
-      document.body.appendChild(letter);
-      setTimeout(() => letter.remove(), 2000);
-    }
-    setInterval(createALetter, 1000);
-  </script>
+<!-- Sürpriz hazır ekranı -->
+<div id="finished">
+  <h2>Bir sürprize hazır mısın?</h2>
+  <button onclick="showShowroom()">Hazırım</button>
+</div>
+
+<!-- Showroom ve Taycan -->
+<div id="showroom">
+  <img src="https://images.unsplash.com/photo-1614028529887-4a59b4df3b6e?q=80&w=1600&auto=format&fit=crop" alt="Taycan 4S">
+  <button onclick="gas()">Gazlayalım mı?</button>
+</div>
+
+<!-- Karartma ve Benzin al -->
+<div id="blackout"><span>Benzin al...</span></div>
+
+<script>
+const places = [
+  "https://images.unsplash.com/photo-1505765058472-9b0f0b1f0f1f?q=80&w=1600&auto=format&fit=crop", // London Eye
+  "https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1600&auto=format&fit=crop", // Tower Bridge
+  "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop"  // Oxford Street
+];
+
+let seen = 0;
+
+function startJourney() {
+  document.getElementById("start").style.display="none";
+  document.getElementById("journey").style.display="flex";
+  document.getElementById("placeImage").src = places[0];
+}
+
+function selectPlace(index){
+  document.getElementById("placeImage").src = places[index];
+  seen++;
+  if(seen === 3){ // 3. seçimden sonra 3 saniye bekle
+    setTimeout(() => {
+      document.getElementById("journey").style.display="none";
+      document.getElementById("finished").style.display="flex";
+    }, 3000);
+  }
+}
+
+function showShowroom(){
+  document.getElementById("finished").style.display="none";
+  document.getElementById("showroom").style.display="flex";
+}
+
+function gas(){
+  document.getElementById("showroom").style.display="none";
+  document.getElementById("blackout").style.display="flex";
+  setTimeout(() => {
+    document.getElementById("blackout").style.display="none";
+  }, 3000);
+}
+</script>
+
 </body>
 </html>
