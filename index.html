@@ -1,111 +1,87 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Sürpriz Yolculuk</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body, html { width:100%; height:100%; overflow:hidden; font-family: Arial, sans-serif; }
+  #container { width:100%; height:100vh; position:relative; display:flex; justify-content:center; align-items:center; background:black; color:white; flex-direction:column; }
+  button { padding:15px 30px; font-size:20px; border:none; border-radius:10px; cursor:pointer; backdrop-filter: blur(5px); background: rgba(255,255,255,0.1); color:white; margin:5px; }
+  #placeButtons { position:absolute; top:10%; display:flex; gap:10px; }
+  #placeImage { width:60%; height:50%; object-fit:cover; border-radius:15px; margin-top:20%; cursor:pointer; }
+  #taycan { width:70%; height:50%; object-fit:cover; border-radius:15px; }
+  #blackout { position:absolute; top:0; left:0; width:100%; height:100%; background:black; display:flex; justify-content:center; align-items:center; font-size:36px; display:none; }
+</style>
+</head>
+<body>
+<div id="container">
+  <button id="startBtn">Yolculuğa Başla</button>
 
-const PLACES = [
-  {
-    id: 'london-eye',
-    title: 'London Eye',
-    hero: 'https://images.unsplash.com/photo-1505765058472-9b0f0b1f0f1f?q=80&w=1600&auto=format&fit=crop',
-    photos: [
-      'https://images.unsplash.com/photo-1526481280698-6f99b0f3c8e2?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1200&auto=format&fit=crop'
-    ]
-  },
-  {
-    id: 'tower-bridge',
-    title: 'Tower Bridge',
-    hero: 'https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1600&auto=format&fit=crop',
-    photos: [
-      'https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1523906630133-f6934a1abf0c?q=80&w=1200&auto=format&fit=crop'
-    ]
-  },
-  {
-    id: 'oxford-street',
-    title: 'Oxford Street',
-    hero: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop',
-    photos: [
-      'https://images.unsplash.com/photo-1523292560146-2ffb3f4d5a2f?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=1200&auto=format&fit=crop'
-    ]
-  }
+  <div id="placeButtons" style="display:none;">
+    <button data-index="0">London Eye</button>
+    <button data-index="1">Tower Bridge</button>
+    <button data-index="2">Oxford Street</button>
+  </div>
+
+  <img id="placeImage" src="" alt="place" style="display:none;" />
+
+  <div id="showroom" style="display:none; flex-direction:column; align-items:center;">
+    <img id="taycan" src="https://images.unsplash.com/photo-1614028529887-4a59b4df3b6e?q=80&w=1600&auto=format&fit=crop" alt="taycan" />
+    <button id="gasBtn">Gazlayalım mı?</button>
+  </div>
+
+  <div id="blackout">Benzin al...</div>
+</div>
+
+<script>
+const places = [
+  "https://images.unsplash.com/photo-1505765058472-9b0f0b1f0f1f?q=80&w=1600&auto=format&fit=crop", // London Eye
+  "https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1600&auto=format&fit=crop", // Tower Bridge
+  "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop"  // Oxford Street
 ];
 
-const TAYCAN = 'https://images.unsplash.com/photo-1614028529887-4a59b4df3b6e?q=80&w=1600&auto=format&fit=crop';
+let seenPlaces = 0;
 
-export default function App() {
-  const [stage, setStage] = useState('intro');
-  const [selected, setSelected] = useState(null);
-  const [seenPlaces, setSeenPlaces] = useState([]);
-  const [currentPhotos, setCurrentPhotos] = useState([]);
-  const [photoIndex, setPhotoIndex] = useState(0);
-  const [showBlackout, setShowBlackout] = useState(false);
-  const [gasText, setGasText] = useState(false);
+const startBtn = document.getElementById("startBtn");
+const placeButtons = document.getElementById("placeButtons");
+const placeImage = document.getElementById("placeImage");
+const showroom = document.getElementById("showroom");
+const gasBtn = document.getElementById("gasBtn");
+const blackout = document.getElementById("blackout");
 
-  function startJourney() {
-    setStage('journey');
-    setSelected(PLACES[0]);
-    setCurrentPhotos(PLACES[0].photos);
-    setPhotoIndex(0);
-    setSeenPlaces([]);
-  }
+startBtn.onclick = () => {
+  startBtn.style.display="none";
+  placeButtons.style.display="flex";
+  placeImage.src = places[0];
+  placeImage.style.display="block";
+};
 
-  function selectPlace(place) {
-    setSelected(place);
-    setCurrentPhotos(place.photos);
-    setPhotoIndex(0);
-
-    if (!seenPlaces.includes(place.id)) {
-      const newSeen = [...seenPlaces, place.id];
-      setSeenPlaces(newSeen);
-      if (newSeen.length === 3) {
-        // 3. yere basınca 4 saniye sonra sürprize geç
-        setTimeout(() => setStage('showroom'), 4000);
-      }
+placeButtons.querySelectorAll("button").forEach(btn => {
+  btn.onclick = () => {
+    const index = btn.getAttribute("data-index");
+    placeImage.src = places[index];
+    seenPlaces++;
+    if(seenPlaces === 3){
+      // 3. seçimden 4 saniye sonra arabaya geç
+      setTimeout(() => {
+        placeButtons.style.display="none";
+        placeImage.style.display="none";
+        showroom.style.display="flex";
+      }, 4000);
     }
-  }
+  };
+});
 
-  function nextPhoto() {
-    setPhotoIndex((prev) => (prev + 1) % currentPhotos.length);
-  }
+placeImage.onclick = () => {
+  // Tıklayınca diğer foto değişmiyor, istersen buraya değişim eklenebilir
+};
 
-  function handleGas() {
-    setShowBlackout(true);
-    setGasText(true);
-    setTimeout(() => setGasText(false), 3000);
-  }
-
-  return (
-    <div style={{width:'100vw', height:'100vh', backgroundColor:'black', color:'white', display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
-      {stage === 'intro' && (
-        <button onClick={startJourney} style={{padding:'20px 40px', fontSize:'24px', borderRadius:'10px', cursor:'pointer', backdropFilter:'blur(5px)', background:'rgba(255,255,255,0.1)'}}>Yolculuğa Başla</button>
-      )}
-
-      {stage === 'journey' && selected && (
-        <>
-          <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%', backgroundImage:`url(${selected.hero})`, backgroundSize:'cover', filter:'brightness(0.5)'}} />
-          <div style={{position:'absolute', top:'10%', display:'flex', gap:'10px'}}>
-            {PLACES.map(p => (
-              <button key={p.id} onClick={()=>selectPlace(p)} style={{padding:'10px 20px', backdropFilter:'blur(4px)', background:'rgba(255,255,255,0.1)', borderRadius:'8px'}}>{p.title}</button>
-            ))}
-          </div>
-          <img src={currentPhotos[photoIndex]} alt="place" onClick={nextPhoto} style={{width:'60%', height:'50%', objectFit:'cover', borderRadius:'15px', marginTop:'20%'}} />
-          <div style={{position:'absolute', bottom:'10px'}}>{seenPlaces.length}/3 yer görüldü</div>
-        </>
-      )}
-
-      {stage === 'showroom' && (
-        <>
-          <img src={TAYCAN} alt="taycan" style={{width:'70%', height:'50%', objectFit:'cover', borderRadius:'15px'}} />
-          <button onClick={handleGas} style={{marginTop:'20px', padding:'15px 30px', borderRadius:'10px'}}>Gazlayalım mı?</button>
-        </>
-      )}
-
-      {showBlackout && (
-        <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%', backgroundColor:'black', display:'flex', justifyContent:'center', alignItems:'center', fontSize:'36px'}}>
-          {gasText && 'Benzin al...'}
-        </div>
-      )}
-    </div>
-  );
-}
-         
+gasBtn.onclick = () => {
+  showroom.style.display="none";
+  blackout.style.display="flex";
+  setTimeout(() => blackout.style.display="none", 3000);
+};
+</script>
+</body>
+</html>
