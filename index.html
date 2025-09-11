@@ -1,91 +1,111 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<title>Sürpriz Yolculuk</title>
-<style>
-  * {margin:0; padding:0; box-sizing:border-box;}
-  body, html {width:100%; height:100%; overflow:hidden; font-family: Arial, sans-serif; background:black; color:white;}
-  #start, #journey, #finished, #showroom, #blackout {position:absolute; width:100%; height:100%; display:flex; justify-content:center; align-items:center; flex-direction:column;}
-  button {padding:15px 30px; font-size:20px; border:none; border-radius:10px; cursor:pointer; backdrop-filter: blur(5px); background: rgba(255,255,255,0.1); color:white; margin:10px;}
-  #placeButtons {display:flex; gap:15px; margin-bottom:20px;}
-  #placeImage {max-width:80%; max-height:60%; border-radius:15px;}
-  #showroom img {max-width:80%; max-height:60%; border-radius:15px;}
-  #blackout {background:black; justify-content:center; align-items:center; display:none;}
-  #blackout span {font-size:2em;}
-</style>
-</head>
-<body>
+import React, { useState, useEffect } from 'react';
 
-<!-- Başlangıç ekranı -->
-<div id="start">
-  <button onclick="startJourney()">Yolculuğa Başla</button>
-</div>
-
-<!-- Yolculuk ekranı -->
-<div id="journey">
-  <div id="placeButtons">
-    <button onclick="selectPlace(0)">London Eye</button>
-    <button onclick="selectPlace(1)">Tower Bridge</button>
-    <button onclick="selectPlace(2)">Oxford Street</button>
-  </div>
-  <img id="placeImage" src="" alt="Place">
-</div>
-
-<!-- Sürpriz hazır ekranı -->
-<div id="finished">
-  <h2>Bir sürprize hazır mısın?</h2>
-  <button onclick="showShowroom()">Hazırım</button>
-</div>
-
-<!-- Showroom ve Taycan -->
-<div id="showroom">
-  <img src="https://images.unsplash.com/photo-1614028529887-4a59b4df3b6e?q=80&w=1600&auto=format&fit=crop" alt="Taycan 4S">
-  <button onclick="gas()">Gazlayalım mı?</button>
-</div>
-
-<!-- Karartma ve Benzin al -->
-<div id="blackout"><span>Benzin al...</span></div>
-
-<script>
-const places = [
-  "https://images.unsplash.com/photo-1505765058472-9b0f0b1f0f1f?q=80&w=1600&auto=format&fit=crop", // London Eye
-  "https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1600&auto=format&fit=crop", // Tower Bridge
-  "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop"  // Oxford Street
+const PLACES = [
+  {
+    id: 'london-eye',
+    title: 'London Eye',
+    hero: 'https://images.unsplash.com/photo-1505765058472-9b0f0b1f0f1f?q=80&w=1600&auto=format&fit=crop',
+    photos: [
+      'https://images.unsplash.com/photo-1526481280698-6f99b0f3c8e2?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1200&auto=format&fit=crop'
+    ]
+  },
+  {
+    id: 'tower-bridge',
+    title: 'Tower Bridge',
+    hero: 'https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1600&auto=format&fit=crop',
+    photos: [
+      'https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1523906630133-f6934a1abf0c?q=80&w=1200&auto=format&fit=crop'
+    ]
+  },
+  {
+    id: 'oxford-street',
+    title: 'Oxford Street',
+    hero: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop',
+    photos: [
+      'https://images.unsplash.com/photo-1523292560146-2ffb3f4d5a2f?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=1200&auto=format&fit=crop'
+    ]
+  }
 ];
 
-let seen = 0;
+const TAYCAN = 'https://images.unsplash.com/photo-1614028529887-4a59b4df3b6e?q=80&w=1600&auto=format&fit=crop';
 
-function startJourney() {
-  document.getElementById("start").style.display="none";
-  document.getElementById("journey").style.display="flex";
-  document.getElementById("placeImage").src = places[0];
-}
+export default function App() {
+  const [stage, setStage] = useState('intro');
+  const [selected, setSelected] = useState(null);
+  const [seenPlaces, setSeenPlaces] = useState([]);
+  const [currentPhotos, setCurrentPhotos] = useState([]);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [showBlackout, setShowBlackout] = useState(false);
+  const [gasText, setGasText] = useState(false);
 
-function selectPlace(index){
-  document.getElementById("placeImage").src = places[index];
-  seen++;
-  if(seen === 3){ // 3. seçimden sonra 3 saniye bekle
-    setTimeout(() => {
-      document.getElementById("journey").style.display="none";
-      document.getElementById("finished").style.display="flex";
-    }, 3000);
+  function startJourney() {
+    setStage('journey');
+    setSelected(PLACES[0]);
+    setCurrentPhotos(PLACES[0].photos);
+    setPhotoIndex(0);
+    setSeenPlaces([]);
   }
-}
 
-function showShowroom(){
-  document.getElementById("finished").style.display="none";
-  document.getElementById("showroom").style.display="flex";
-}
+  function selectPlace(place) {
+    setSelected(place);
+    setCurrentPhotos(place.photos);
+    setPhotoIndex(0);
 
-function gas(){
-  document.getElementById("showroom").style.display="none";
-  document.getElementById("blackout").style.display="flex";
-  setTimeout(() => {
-    document.getElementById("blackout").style.display="none";
-  }, 3000);
-}
-</script>
+    if (!seenPlaces.includes(place.id)) {
+      const newSeen = [...seenPlaces, place.id];
+      setSeenPlaces(newSeen);
+      if (newSeen.length === 3) {
+        // 3. yere basınca 4 saniye sonra sürprize geç
+        setTimeout(() => setStage('showroom'), 4000);
+      }
+    }
+  }
 
-</body>
-</html>
+  function nextPhoto() {
+    setPhotoIndex((prev) => (prev + 1) % currentPhotos.length);
+  }
+
+  function handleGas() {
+    setShowBlackout(true);
+    setGasText(true);
+    setTimeout(() => setGasText(false), 3000);
+  }
+
+  return (
+    <div style={{width:'100vw', height:'100vh', backgroundColor:'black', color:'white', display:'flex', justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
+      {stage === 'intro' && (
+        <button onClick={startJourney} style={{padding:'20px 40px', fontSize:'24px', borderRadius:'10px', cursor:'pointer', backdropFilter:'blur(5px)', background:'rgba(255,255,255,0.1)'}}>Yolculuğa Başla</button>
+      )}
+
+      {stage === 'journey' && selected && (
+        <>
+          <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%', backgroundImage:`url(${selected.hero})`, backgroundSize:'cover', filter:'brightness(0.5)'}} />
+          <div style={{position:'absolute', top:'10%', display:'flex', gap:'10px'}}>
+            {PLACES.map(p => (
+              <button key={p.id} onClick={()=>selectPlace(p)} style={{padding:'10px 20px', backdropFilter:'blur(4px)', background:'rgba(255,255,255,0.1)', borderRadius:'8px'}}>{p.title}</button>
+            ))}
+          </div>
+          <img src={currentPhotos[photoIndex]} alt="place" onClick={nextPhoto} style={{width:'60%', height:'50%', objectFit:'cover', borderRadius:'15px', marginTop:'20%'}} />
+          <div style={{position:'absolute', bottom:'10px'}}>{seenPlaces.length}/3 yer görüldü</div>
+        </>
+      )}
+
+      {stage === 'showroom' && (
+        <>
+          <img src={TAYCAN} alt="taycan" style={{width:'70%', height:'50%', objectFit:'cover', borderRadius:'15px'}} />
+          <button onClick={handleGas} style={{marginTop:'20px', padding:'15px 30px', borderRadius:'10px'}}>Gazlayalım mı?</button>
+        </>
+      )}
+
+      {showBlackout && (
+        <div style={{position:'absolute', top:0, left:0, width:'100%', height:'100%', backgroundColor:'black', display:'flex', justifyContent:'center', alignItems:'center', fontSize:'36px'}}>
+          {gasText && 'Benzin al...'}
+        </div>
+      )}
+    </div>
+  );
+}
+         
