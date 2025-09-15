@@ -1,87 +1,60 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Sürpriz Yolculuk</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body, html { width:100%; height:100%; overflow:hidden; font-family: Arial, sans-serif; }
-  #container { width:100%; height:100vh; position:relative; display:flex; justify-content:center; align-items:center; background:black; color:white; flex-direction:column; }
-  button { padding:15px 30px; font-size:20px; border:none; border-radius:10px; cursor:pointer; backdrop-filter: blur(5px); background: rgba(255,255,255,0.1); color:white; margin:5px; }
-  #placeButtons { position:absolute; top:10%; display:flex; gap:10px; }
-  #placeImage { width:60%; height:50%; object-fit:cover; border-radius:15px; margin-top:20%; cursor:pointer; }
-  #taycan { width:70%; height:50%; object-fit:cover; border-radius:15px; }
-  #blackout { position:absolute; top:0; left:0; width:100%; height:100%; background:black; display:flex; justify-content:center; align-items:center; font-size:36px; display:none; }
-</style>
-</head>
-<body>
-<div id="container">
-  <button id="startBtn">Yolculuğa Başla</button>
-
-  <div id="placeButtons" style="display:none;">
-    <button data-index="0">London Eye</button>
-    <button data-index="1">Tower Bridge</button>
-    <button data-index="2">Oxford Street</button>
-  </div>
-
-  <img id="placeImage" src="" alt="place" style="display:none;" />
-
-  <div id="showroom" style="display:none; flex-direction:column; align-items:center;">
-    <img id="taycan" src="https://images.unsplash.com/photo-1614028529887-4a59b4df3b6e?q=80&w=1600&auto=format&fit=crop" alt="taycan" />
-    <button id="gasBtn">Gazlayalım mı?</button>
-  </div>
-
-  <div id="blackout">Benzin al...</div>
-</div>
-
-<script>
-const places = [
-  "https://images.unsplash.com/photo-1505765058472-9b0f0b1f0f1f?q=80&w=1600&auto=format&fit=crop", // London Eye
-  "https://images.unsplash.com/photo-1534081333815-ae5019106622?q=80&w=1600&auto=format&fit=crop", // Tower Bridge
-  "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop"  // Oxford Street
-];
-
-let seenPlaces = 0;
-
-const startBtn = document.getElementById("startBtn");
-const placeButtons = document.getElementById("placeButtons");
-const placeImage = document.getElementById("placeImage");
-const showroom = document.getElementById("showroom");
-const gasBtn = document.getElementById("gasBtn");
-const blackout = document.getElementById("blackout");
-
-startBtn.onclick = () => {
-  startBtn.style.display="none";
-  placeButtons.style.display="flex";
-  placeImage.src = places[0];
-  placeImage.style.display="block";
-};
-
-placeButtons.querySelectorAll("button").forEach(btn => {
-  btn.onclick = () => {
-    const index = btn.getAttribute("data-index");
-    placeImage.src = places[index];
-    seenPlaces++;
-    if(seenPlaces === 3){
-      // 3. seçimden 4 saniye sonra arabaya geç
-      setTimeout(() => {
-        placeButtons.style.display="none";
-        placeImage.style.display="none";
-        showroom.style.display="flex";
-      }, 4000);
-    }
-  };
-});
-
-placeImage.onclick = () => {
-  // Tıklayınca diğer foto değişmiyor, istersen buraya değişim eklenebilir
-};
-
-gasBtn.onclick = () => {
-  showroom.style.display="none";
-  blackout.style.display="flex";
-  setTimeout(() => blackout.style.display="none", 3000);
-};
-</script>
-</body>
-</html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elif's World</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        
+        .section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-shadow: 1px 1px rgba(0,0,0,.5);
+            transition: transform .8s ease-in-out;
+            z-index: 1;
+        }
+        
+        .bg-red {
+            background: linear-gradient(to bottom, #ff3333, #cc0000);
+            animation: red-fade 2s infinite;
+        }
+        
+        .bg-car {
+            background-image: url('https://via.placeholder.com/1920x1080');
+            background-size: cover;
+        }
+        
+        .bg-flower {
+            background-image: url('https://via.placeholder.com/1920x1080');
+            background-size: cover;
+        }
+        
+        .bg-city {
+            background-image: url('https://via.placeholder.com/1920x1080');
+            background-size: cover;
+        }
+        
+        .bg-music {
+            background-color: #333;
+            padding-top: 50%;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .bg-music svg {
+            fill: #f0f0f0;
+            font-size: 100px;
+        }
+        
+        @keyframes red-fade {
+          0%, 100% { background-color: #ff3333; }
